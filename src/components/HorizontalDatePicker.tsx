@@ -66,9 +66,9 @@ export default function HorizontalDatePicker() {
   }, [currentMonth]);
 
   return (
-    <div className="flex flex-col gap-2 bg-black px-4 py-2 w-full max-w-[600px] mx-auto">
+    <div className="flex flex-col gap-2 bg-black px-4 py-2 w-full mx-auto">
       {/* Header con mes actual y navegación */}
-      <div className="flex justify-between items-center text-white mb-2">
+      <div className="flex justify-between items-center text-white mb-2 w-full">
         <button onClick={goToPrevMonth}>←</button>
         <span className="font-semibold">{format(currentMonth, "MMMM yyyy")}</span>
         <button onClick={goToNextMonth}>→</button>

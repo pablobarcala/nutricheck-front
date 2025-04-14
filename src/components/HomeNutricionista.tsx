@@ -27,6 +27,7 @@ export default function HomeNutricionista() {
                 flex-col
                 gap-5
                 py-5
+                w-full
             "
         >
             <p className="font-bold text-xl">{saludo}, Juan</p>
