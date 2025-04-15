@@ -75,7 +75,7 @@ export default function HorizontalDatePicker() {
       </div>
 
       {/* Carrusel con navegación */}
-      <div className="flex items-center gap-2">
+      <div className="flex justify-between items-center gap-2 w-full">
         <button
           onClick={scrollLeft}
           disabled={startIndex === 0}
@@ -94,7 +94,7 @@ export default function HorizontalDatePicker() {
                 key={key}
                 onClick={() => setSelectedDate(date)}
                 className={clsx(
-                  "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px]",
+                  "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
                   isActive ? "text-[#4AFF50]" : "text-white"
                 )}
               >
