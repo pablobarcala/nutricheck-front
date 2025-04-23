@@ -66,16 +66,16 @@ export default function HorizontalDatePicker() {
   }, [currentMonth]);
 
   return (
-    <div className="flex flex-col gap-2 bg-black px-4 py-2 w-full max-w-[600px] mx-auto">
+    <div className="flex flex-col gap-2 bg-black px-4 py-2 w-full mx-auto">
       {/* Header con mes actual y navegación */}
-      <div className="flex justify-between items-center text-white mb-2">
+      <div className="flex justify-between items-center text-white mb-2 w-full">
         <button onClick={goToPrevMonth}>←</button>
         <span className="font-semibold">{format(currentMonth, "MMMM yyyy")}</span>
         <button onClick={goToNextMonth}>→</button>
       </div>
 
       {/* Carrusel con navegación */}
-      <div className="flex items-center gap-2">
+      <div className="flex justify-between items-center gap-2 w-full">
         <button
           onClick={scrollLeft}
           disabled={startIndex === 0}
@@ -94,7 +94,7 @@ export default function HorizontalDatePicker() {
                 key={key}
                 onClick={() => setSelectedDate(date)}
                 className={clsx(
-                  "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px]",
+                  "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
                   isActive ? "text-[#4AFF50]" : "text-white"
                 )}
               >
