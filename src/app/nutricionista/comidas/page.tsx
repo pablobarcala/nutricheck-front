@@ -47,8 +47,30 @@ export default function ComidasNutricionistaPage() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        try {
+            const response = await fetch("https://localhost:7147/api/Comidas/guardar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify(comida),
+            })
+
+            if(response.ok) {
+                alert("Comida guardada correctamente.");
+            } else {
+                const errorData = await response.text();
+                alert(`Error al guardar la comida: ${errorData}`);
+            }
+        } catch (error) {
+            console.error("Error al guardar la comida:", error);
+            alert("Error al guardar la comida. Inténtalo de nuevo.");
+        }
+
         setListaComidas(prev => [...prev, comida]);
         setMostrarFormulario(false);
         setComida({ nombre: "", hidratos: "", proteinas: "", grasas: "", kcal: "" });
