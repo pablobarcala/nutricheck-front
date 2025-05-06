@@ -1,16 +1,29 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+type JwtPayload = {
+  email: string;
+  rol: string;
+  exp: number;
+}
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter(); // Importar el hook useRouter
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setLoading(true); // Iniciar el estado de carga
+
     try {
-      const response = await fetch("http://localhost:3001/api/login", {
+      const response = await fetch("https://localhost:7147/api/Auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -18,25 +31,44 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const data = await response.text();
 
       if (response.ok) {
-        console.log("Login exitoso", data);
-        // redireccionar o guardar token
+        localStorage.setItem("token", data); // Guardar el token en localStorage
+
+        const decoded: JwtPayload = jwtDecode(data)
+
+        switch (decoded.rol) {
+          case "nutricionista":
+            router.push("/nutricionista/inicio"); // Redirigir a la página del nutricionista
+            break;
+          case "paciente":
+            router.push("/paciente/inicio"); // Redirigir a la página del paciente
+            break;
+          default:
+            alert("Rol no reconocido");
+            return;
+        }
       } else {
-        console.error("Error al iniciar sesión:", data.message);
-        alert(data.message || "Credenciales inválidas");
+        alert(data || "Credenciales inválidas");
       }
     } catch (error) {
       console.error("Error de red:", error);
       alert("No se pudo conectar con el servidor.");
+    } finally {
+      setLoading(false); // Finalizar el estado de carga
     }
   };
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-between py-10 font-[Montserrat]">
+      {loading
+      ?
+        <LoadingSpinner />
+      : <></>}
+      
       {/* Título */}
-      <div className="mt-10 text-center">
+      <div className="mt-28 text-center">
         <h1 className="text-4xl font-bold">
           <span className="text-white">Nutri</span>
           <span className="text-[#4AFF50]">Check</span>

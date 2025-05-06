@@ -45,7 +45,7 @@ const items = [
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  const hideSidebarRoutes = ["/login", "/registro"];
+  const hideSidebarRoutes = ["/login", "/registro", "/registro/encuesta"];
 
   const showSidebar = !hideSidebarRoutes.includes(pathname);
   const containerClass = showSidebar

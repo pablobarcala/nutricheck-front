@@ -1,5 +1,7 @@
 "use client";
 
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface EncuestaData {
@@ -11,6 +13,7 @@ interface EncuestaData {
 }
 
 export default function EncuestaPage() {
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<EncuestaData>({
     peso: undefined,
     altura: undefined,
@@ -18,6 +21,7 @@ export default function EncuestaPage() {
     sexo: "",
     actividad: "",
   });
+  const router = useRouter(); // Importar el hook useRouter
 
   const [calorias, setCalorias] = useState<number | null>(null);
 
@@ -74,6 +78,7 @@ export default function EncuestaPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true); // Iniciar el loading
 
     const { peso, altura, fechaNacimiento, sexo, actividad } = formData;
     if (!peso || !altura || !fechaNacimiento || !sexo || !actividad) {
@@ -107,10 +112,12 @@ export default function EncuestaPage() {
     };
 
     try {
-      const res = await fetch("http://localhost:3001/api/encuesta", {
+      const token = localStorage.getItem("token");
+      const res = await fetch("https://localhost:7147/api/Pacientes/guardar-datos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(datosAEnviar),
       });
@@ -118,14 +125,22 @@ export default function EncuestaPage() {
       if (!res.ok) throw new Error("Error al enviar encuesta");
 
       alert("Datos de salud enviados correctamente");
+      router.push("/paciente/inicio")
     } catch (error) {
       console.error(error);
       alert("Hubo un error al enviar los datos");
+    } finally {
+      setLoading(false); // Finalizar el loading
     }
   };
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center py-10 font-[Montserrat]">
+      {loading
+      ?
+        <LoadingSpinner />
+      : <></>}
+
       <h1 className="text-3xl font-bold mb-6">Completar datos de salud</h1>
 
       <form

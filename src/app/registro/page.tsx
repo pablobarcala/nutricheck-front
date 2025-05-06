@@ -1,21 +1,25 @@
 "use client";
 
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface FormData {
-  tipo: "paciente" | "nutricionista";
+  rol: "paciente" | "nutricionista";
   nombre: string;
   email: string;
   password: string;
 }
 
 export default function RegistroPage() {
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState<FormData>({
-    tipo: "paciente",
+    rol: "paciente",
     nombre: "",
     email: "",
     password: "",
   });
+  const router = useRouter(); // Importar el hook useRouter
 
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -30,13 +34,15 @@ export default function RegistroPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setLoading(true); // Iniciar el loading
     if (formData.password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
+      setLoading(false); // Detener el loading
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/registro", {
+      const response = await fetch("https://localhost:7147/api/Auth/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,17 +54,29 @@ export default function RegistroPage() {
         throw new Error("Error al registrar usuario");
       }
 
-      const data = await response.json();
-      console.log("Usuario registrado con éxito:", data);
+      const data = await response.text();
+      localStorage.setItem("token", data); // Guardar el token en localStorage
       alert("Registro exitoso");
+      if(formData.rol === "paciente") {
+        router.push("/registro/encuesta"); // Redirigir a la encuesta si es paciente
+      } else {
+        router.push("/nutricionista/inicio"); // Redirigir a la página principal si es nutricionista
+      }
     } catch (error) {
       console.error("Error en el registro:", error);
       alert("Hubo un error al registrar. Intentá más tarde.");
+    } finally {
+      setLoading(false); // Detener el loading
     }
   };
 
   return (
     <div className="min-h-screen bg-black flex flex-col items-center py-10 font-[Montserrat]">
+      {loading
+      ?
+        <LoadingSpinner />
+      : <></>}
+
       <div className="mt-10 text-center">
         <h1 className="text-4xl font-bold">
           <span className="text-white">Nutri</span>
@@ -71,8 +89,8 @@ export default function RegistroPage() {
       <div className="mt-6 mb-4">
         <label className="text-white text-sm mr-4">Registrarse como:</label>
         <select
-          name="tipo"
-          value={formData.tipo}
+          name="rol"
+          value={formData.rol}
           onChange={handleChange}
           className="p-2 rounded-xl border border-white bg-black text-white outline-none text-sm"
         >
