@@ -61,14 +61,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-between py-10 font-[Montserrat]">
+    <div className="min-h-screen bg-black flex flex-col items-center py-10 font-[Montserrat]">
       {loading
       ?
         <LoadingSpinner />
       : <></>}
       
       {/* Título */}
-      <div className="mt-28 text-center">
+      <div className="mt-2 text-center">
         <h1 className="text-4xl font-bold">
           <span className="text-white">Nutri</span>
           <span className="text-[#4AFF50]">Check</span>
