@@ -7,7 +7,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 type JwtPayload = {
   email: string;
-  rol: string;
+  role: string;
   exp: number;
 }
 
@@ -38,7 +38,7 @@ export default function LoginPage() {
 
         const decoded: JwtPayload = jwtDecode(data)
 
-        switch (decoded.rol) {
+        switch (decoded.role) {
           case "nutricionista":
             router.push("/nutricionista/inicio"); // Redirigir a la página del nutricionista
             break;
