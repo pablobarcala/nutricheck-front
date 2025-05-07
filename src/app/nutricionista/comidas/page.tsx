@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Comida {
     nombre: string;
@@ -21,6 +21,30 @@ export default function ComidasNutricionistaPage() {
     });
 
     const [listaComidas, setListaComidas] = useState<any[]>([]); // Agregado `any[]` para evitar error de tipo
+
+    useEffect(() => {
+        const fetchComidas = async () => {
+            try {
+                const response = await fetch("https://localhost:7147/api/Comidas/comidas-de-nutricionista", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error al cargar las comidas");
+                }
+
+                const data = await response.json();
+                setListaComidas(data);
+            } catch (error) {
+                console.error("Error al cargar las comidas:", error);
+            }
+        };
+
+        fetchComidas();
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -51,7 +75,7 @@ export default function ComidasNutricionistaPage() {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://localhost:7147/api/Comidas/guardar", {
+            const response = await fetch("https://localhost:7147/api/Comidas/crear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
