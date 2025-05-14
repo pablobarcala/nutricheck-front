@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { environment } from "@/environment/environment";
 
 interface Comida {
     nombre: string;
@@ -25,7 +26,7 @@ export default function ComidasNutricionistaPage() {
     useEffect(() => {
         const fetchComidas = async () => {
             try {
-                const response = await fetch("https://localhost:7147/api/Comidas/comidas-de-nutricionista", {
+                const response = await fetch(environment.API+"/api/Comidas/comidas-de-nutricionista", {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

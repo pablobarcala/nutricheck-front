@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { environment } from "@/environment/environment";
 
 type JwtPayload = {
   email: string;
@@ -23,7 +24,7 @@ export default function LoginPage() {
     setLoading(true); // Iniciar el estado de carga
 
     try {
-      const response = await fetch("https://localhost:7147/api/Auth/login", {
+      const response = await fetch(environment.API+"/api/Auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

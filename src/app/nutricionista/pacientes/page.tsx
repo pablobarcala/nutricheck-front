@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { environment } from "@/environment/environment";
 interface Paciente {
   id: string;
   nombre: string;
@@ -17,7 +17,7 @@ export default function MisPacientesPage() {
   useEffect(() => {
     const fetchPacientes = async () => {
       try {
-        const res = await fetch("/api/Nutricionistas/pacientes"); // Ajusta el endpoint si es necesario
+        const res = await fetch(environment.API+"/api/Nutricionistas/pacientes"); 
         if (!res.ok) throw new Error("Error al obtener pacientes");
 
         const data = await res.json();

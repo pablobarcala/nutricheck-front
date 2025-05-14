@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import SeleccionarComidaModal from "@/components/Modales/ModalSeleccionComidas";
+import { environment } from "@/environment/environment";
 
 interface Paciente {
   id: string;
@@ -37,7 +38,7 @@ export default function PacienteDetallePage() {
 
   const fetchPaciente = async () => {
     try {
-      const res = await fetch(`/api/Pacientes/${id}`);
+      const res = await fetch(`${environment.API}/api/Pacientes/${id}`);
       if (!res.ok) throw new Error("Error al cargar paciente");
 
       const data = await res.json();

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import ModalPaciente from "@/components/Modales/ModalPaciente";
-
+import { environment } from "@/environment/environment";
 interface Paciente {
   id: string;
   nombre: string;
@@ -24,7 +24,7 @@ export default function BusquedaPacientesPage() {
     if (!nombre.trim()) return;
 
     try {
-      const res = await fetch(`/api/Pacientes/buscar?nombre=${encodeURIComponent(nombre)}`);
+      const res = await fetch(`${environment.API}/api/Pacientes/buscar?nombre=${encodeURIComponent(nombre)}`);
       if (!res.ok) throw new Error("Error al buscar pacientes");
 
       const data = await res.json();

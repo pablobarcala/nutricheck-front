@@ -1,6 +1,7 @@
 "use client";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { environment } from "@/environment/environment";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ export default function RegistroPage() {
     }
 
     try {
-      const response = await fetch("https://localhost:7147/api/Auth/registro", {
+      const response = await fetch(environment.API+"/api/Auth/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
