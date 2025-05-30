@@ -39,6 +39,7 @@ export default function PacienteDetallePage() {
   const [comidas, setComidas] = useState<Comida[]>([]);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
+  const [comidasRegistradas, setComidasRegistradas] = useState([]);
   const [form, setForm] = useState({
     calorias: 0,
     porcentajeGrasas: 0,
@@ -61,6 +62,16 @@ export default function PacienteDetallePage() {
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
 
+  const fetchComidasRegistradas = async () => {
+  try {
+    const res = await fetch(`${environment.API}/api/Pacientes/${id}/comidas`);
+    if (!res.ok) throw new Error("Error al cargar comidas registradas");
+    const data = await res.json();
+    setComidasRegistradas(data);
+  } catch {
+    alert("No se pudieron cargar las comidas registradas del paciente");
+  }
+};
   const fetchPaciente = async () => {
     try {
       const res = await fetch(`${environment.API}/api/Pacientes/${id}`);
@@ -142,6 +153,7 @@ export default function PacienteDetallePage() {
     if (id) {
       fetchPaciente();
       fetchComidasPaciente();
+      fetchComidasRegistradas();
     }
   }, [id]);
 
@@ -192,7 +204,7 @@ export default function PacienteDetallePage() {
       </div>
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-3">🍽️ Comidas asignadas</h2>
+        <h2 className="text-xl font-semibold mb-3"> Comidas asignadas</h2>
         <ul className="space-y-2">
           {comidas.length > 0 ? comidas.map((comida) => (
             <li key={comida.id} className="border border-gray-600 p-3 rounded-md bg-gray-900">
@@ -203,6 +215,19 @@ export default function PacienteDetallePage() {
           )}
         </ul>
       </div>
+      <div className="mb-6 mt-10">
+       <h2 className="text-xl font-semibold mb-3">📋 Comidas registradas por el paciente</h2>
+        <ul className="space-y-2">
+         {comidasRegistradas.length > 0 ? comidasRegistradas.map((comida: any) => (
+         <li key={comida.id} className="border border-gray-600 p-3 rounded-md bg-gray-800">
+           <p className="font-semibold">{comida.nombre}</p>
+           <p>{comida.caloriasTotales} kcal — {new Date(comida.fecha).toLocaleDateString()}</p>
+         </li>
+    )) : (
+      <p className="text-gray-400">Este paciente aún no registró comidas.</p>
+    )}
+  </ul>
+</div>
 
       <button
         onClick={() => setMostrarModal(true)}
