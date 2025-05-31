@@ -2,8 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import SideBar from "./SideBar";
+import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import { set } from "date-fns";
 
-const items = [
+const nutricionistaItems = [
   {
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none">
@@ -33,6 +36,15 @@ const items = [
   },
   {
     icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <path d="M16.625 28C13.4458 28 10.7555 26.8987 8.554 24.696C6.3525 22.4933 5.25117 19.803 5.25 16.625C5.24883 13.447 6.35017 10.7567 8.554 8.554C10.7578 6.35133 13.4482 5.25 16.625 5.25C19.8018 5.25 22.4928 6.35133 24.6978 8.554C26.9028 10.7567 28.0035 13.447 28 16.625C28 17.9083 27.7958 19.1187 27.3875 20.2562C26.9792 21.3937 26.425 22.4 25.725 23.275L35.525 33.075C35.8458 33.3958 36.0063 33.8042 36.0063 34.3C36.0063 34.7958 35.8458 35.2042 35.525 35.525C35.2042 35.8458 34.7958 36.0063 34.3 36.0063C33.8042 36.0063 33.3958 35.8458 33.075 35.525L23.275 25.725C22.4 26.425 21.3938 26.9792 20.2563 27.3875C19.1188 27.7958 17.9083 28 16.625 28ZM16.625 24.5C18.8125 24.5 20.6722 23.7347 22.204 22.204C23.7358 20.6733 24.5012 18.8137 24.5 16.625C24.4988 14.4363 23.7335 12.5773 22.204 11.0478C20.6745 9.51825 18.8148 8.75233 16.625 8.75C14.4352 8.74767 12.5761 9.51358 11.0478 11.0478C9.51942 12.5819 8.7535 14.441 8.75 16.625C8.7465 18.809 9.51242 20.6687 11.0478 22.204C12.5831 23.7393 14.4422 24.5047 16.625 24.5Z" fill="currentColor"/>
+      </svg>
+    ),
+    name: "Buscar",
+    ruta: "/nutricionista/busqueda"
+  },
+  {
+    icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="43" height="42" viewBox="0 0 43 42" fill="none">
         <path d="M11 35C12.925 35 14.5 33.425 14.5 31.5V19.25C14.5 17.325 12.925 15.75 11 15.75C9.075 15.75 7.5 17.325 7.5 19.25V31.5C7.5 33.425 9.075 35 11 35ZM28.5 26.25V31.5C28.5 33.425 30.075 35 32 35C33.925 35 35.5 33.425 35.5 31.5V26.25C35.5 24.325 33.925 22.75 32 22.75C30.075 22.75 28.5 24.325 28.5 26.25ZM21.5 35C23.425 35 25 33.425 25 31.5V10.5C25 8.575 23.425 7 21.5 7C19.575 7 18 8.575 18 10.5V31.5C18 33.425 19.575 35 21.5 35Z" fill="currentColor"/>
       </svg>
@@ -42,7 +54,49 @@ const items = [
   }
 ];
 
+const pacienteItems = [
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <path d="M36.552 4.59375L36.5499 36.1226C37.1143 37.0515 37.6983 37.4086 38.1881 37.4062C38.674 37.404 39.2517 37.0425 39.8052 36.1415L38.2937 20.0378L38.2761 19.8416L38.3971 19.6853C40.134 17.4566 40.7409 13.6061 40.2455 10.3493C39.9977 8.72082 39.4791 7.24689 38.7529 6.20493C38.1439 5.33113 37.4174 4.77373 36.5522 4.59375H36.552ZM6.00563 4.59408L6.00432 10.1006L4.97401 10.0993V4.59441H3.80055L3.80071 10.0995H2.76893V4.59441H1.57373V13.0623C1.57365 13.9989 2.08479 14.5182 2.88951 14.8393L3.22256 14.9723L3.21518 15.3308C3.05111 22.2682 2.88894 29.2055 2.72611 36.1428C3.2872 37.0609 3.86355 37.4085 4.34343 37.4062C4.82332 37.404 5.39918 37.0472 5.95313 36.1403C5.76315 29.2048 5.57336 22.2692 5.38375 15.3336L5.37391 14.9727L5.70802 14.8409C6.55491 14.5041 7.10575 13.9325 7.10575 13.0628V4.59408H6.00563ZM20.9999 7.79297C17.4972 7.79297 14.1379 9.18442 11.6611 11.6612C9.1843 14.138 7.79285 17.4973 7.79285 21C7.79285 24.5027 9.1843 27.862 11.6611 30.3388C14.1379 32.8156 17.4972 34.207 20.9999 34.207C24.5026 34.207 27.8619 32.8156 30.3387 30.3388C32.8155 27.862 34.2069 24.5027 34.2069 21C34.2069 17.4973 32.8155 14.138 30.3387 11.6612C27.8619 9.18442 24.5026 7.79297 20.9999 7.79297Z" fill="currentColor" />
+      </svg>
+    ),
+    name: "Comidas",
+    ruta: "/paciente/comidas"
+  },
+]
+
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {
+  const [role, setRole] = useState<string | null>(null);
+
+  function getUserRoleFromToken(token: string): string | null {
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.role || null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const role = getUserRoleFromToken(token);
+      setRole(role);
+    }
+  })
+
+  if (!role) {
+    return null; // O puedes mostrar un loading spinner aquí
+  }
+
+  const itemsByRole: Record<string, any[]> = {
+    nutricionista: nutricionistaItems,
+    paciente: pacienteItems, // tus ítems para pacientes
+  };
+
+  const currentItems = itemsByRole[role] || [];
+
   const pathname = usePathname();
 
   const hideSidebarRoutes = ["/login", "/registro", "/registro/encuesta"];
@@ -54,7 +108,7 @@ export default function GlobalLayout({ children }: { children: React.ReactNode }
 
   return (
     <div className={containerClass}>
-      {showSidebar && <SideBar items={items} />}
+      {showSidebar && <SideBar items={currentItems} />}
       {children}
     </div>
   );

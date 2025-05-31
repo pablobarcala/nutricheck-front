@@ -36,9 +36,15 @@ export default function ComidasPacientePage() {
     }
   };
 
-  const fetchComidas = async (pacienteId: string) => {
+  const fetchComidas = async () => {
     try {
-      const res = await fetch(`${environment.API}/api/Pacientes/${pacienteId}/comidas`);
+      const res = await fetch(`${environment.API}/api/Pacientes/comidas`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (!res.ok) throw new Error("Error al obtener comidas");
 
       const data = await res.json();
@@ -50,12 +56,12 @@ export default function ComidasPacientePage() {
   };
 
   useEffect(() => {
-    const pacienteId = obtenerIdDesdeToken();
-    if (pacienteId) {
-      fetchComidas(pacienteId);
-    } else {
-      alert("No se pudo identificar al paciente");
-    }
+    fetchComidas();
+    // const pacienteId = obtenerIdDesdeToken();
+    // if (pacienteId) {
+    // } else {
+    //   alert("No se pudo identificar al paciente");
+    // }
   }, []);
 
   return (
@@ -68,7 +74,7 @@ export default function ComidasPacientePage() {
           onClick={() => setComidaSeleccionada(comida)}
           className="w-full text-left p-2 border rounded-md hover:bg-white hover:text-black transition"
         >
-          {comida.nombre} - {comida.caloriasTotales} kcal
+          {comida.nombre} - {comida.kcal} kcal
         </button>
       ))}
 

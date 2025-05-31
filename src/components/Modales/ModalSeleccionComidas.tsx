@@ -1,5 +1,6 @@
 "use client";
 
+import { environment } from "@/environment/environment";
 import { useEffect, useState } from "react";
 
 interface Comida {
@@ -14,13 +15,18 @@ interface Props {
 }
 
 export default function SeleccionarComidaModal({ onClose, onVincular }: Props) {
-  const [comidas, setComidas] = useState<Comida[]>([]);
+  const [comidas, setComidas] = useState<[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchComidas = async () => {
       try {
-        const res = await fetch("/api/Nutricionistas/comidas");
+        const res = await fetch(`${environment.API}/api/Comidas/comidas-de-nutricionista`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
         if (!res.ok) throw new Error("Error al obtener las comidas");
 
         const data = await res.json();
@@ -45,11 +51,11 @@ export default function SeleccionarComidaModal({ onClose, onVincular }: Props) {
           <p>Cargando comidas...</p>
         ) : comidas.length > 0 ? (
           <ul className="space-y-2 max-h-60 overflow-y-auto">
-            {comidas.map((comida) => (
+            {comidas.map((comida: any) => (
               <li key={comida.id} className="border rounded-md p-2 flex justify-between items-center">
                 <div>
                   <p className="font-semibold">{comida.nombre}</p>
-                  <p className="text-sm text-gray-600">{comida.calorias} kcal</p>
+                  <p className="text-sm text-gray-600">{comida.kcal} kcal</p>
                 </div>
                 <button
                   onClick={() => onVincular(comida.id)}

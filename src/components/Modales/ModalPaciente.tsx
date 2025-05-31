@@ -9,7 +9,7 @@ interface ModalPacienteProps {
     peso: number;
     altura: number;
     sexo: string;
-    caloriasRecomendadas: number;
+    calorias: number;
   };
   edad: number;
   onClose: () => void;
@@ -27,7 +27,7 @@ export default function ModalPaciente({ paciente, edad, onClose, onVincular }: M
         <p><strong>Peso:</strong> {paciente.peso} kg</p>
         <p><strong>Altura:</strong> {paciente.altura} cm</p>
         <p><strong>Sexo:</strong> {paciente.sexo}</p>
-        <p><strong>Calorías recomendadas:</strong> {paciente.caloriasRecomendadas} kcal</p>
+        <p><strong>Calorías recomendadas:</strong> {paciente.calorias} kcal</p>
 
         <div className="flex justify-end gap-2 pt-4">
           <button onClick={onClose} className="px-4 py-2 border rounded hover:bg-gray-200">Cancelar</button>

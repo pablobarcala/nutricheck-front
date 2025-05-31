@@ -34,16 +34,16 @@ interface Comida {
 export default function PacienteDetallePage() {
   const { id } = useParams();
   const [rol, setRol] = useState<string | null>(null);
-  const [paciente, setPaciente] = useState<Paciente | null>(null);
+  const [paciente, setPaciente] = useState<any | null>(null);
   const [edad, setEdad] = useState<number | null>(null);
   const [comidas, setComidas] = useState<Comida[]>([]);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [form, setForm] = useState({
     calorias: 0,
-    porcentajeGrasas: 0,
-    porcentajeCarbohidratos: 0,
-    porcentajeProteinas: 0,
+    grasas: 0,
+    carbohidratos: 0,
+    proteinas: 0,
   });
 
   useEffect(() => {
@@ -63,16 +63,16 @@ export default function PacienteDetallePage() {
 
   const fetchPaciente = async () => {
     try {
-      const res = await fetch(`${environment.API}/api/Pacientes/${id}`);
+      const res = await fetch(`${environment.API}/api/Pacientes/paciente/${id}`);
       if (!res.ok) throw new Error("Error al cargar paciente");
       const data = await res.json();
       setPaciente(data);
-      setEdad(calcularEdad(data.fechaNacimiento));
+      setEdad(calcularEdad(data.paciente.fechaNacimiento));
       setForm({
-        calorias: data.calorias || 0,
-        porcentajeGrasas: data.porcentajeGrasas || 0,
-        porcentajeCarbohidratos: data.porcentajeCarbohidratos || 0,
-        porcentajeProteinas: data.porcentajeProteinas || 0,
+        calorias: data.paciente.calorias || 0,
+        grasas: data.paciente.grasas || 0,
+        carbohidratos: data.paciente.carbohidratos || 0,
+        proteinas: data.paciente.proteinas || 0,
       });
     } catch (err) {
       alert("No se pudo cargar la información del paciente");
@@ -81,7 +81,7 @@ export default function PacienteDetallePage() {
 
   const fetchComidasPaciente = async () => {
     try {
-      const res = await fetch(`/api/Pacientes/${id}/comidas`);
+      const res = await fetch(`${environment.API}/api/Pacientes/comidas/${id}`);
       if (!res.ok) throw new Error("Error al cargar comidas");
       const data = await res.json();
       setComidas(data);
@@ -92,10 +92,9 @@ export default function PacienteDetallePage() {
 
   const handleVincularComida = async (comidaId: string) => {
     try {
-      const res = await fetch(`/api/Pacientes/${id}/comidas`, {
+      const res = await fetch(`${environment.API}/api/Pacientes/agregar-comida/${id}/${comidaId}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ comidaId }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (!res.ok) throw new Error();
       fetchComidasPaciente();
@@ -112,9 +111,9 @@ export default function PacienteDetallePage() {
 
   const handleGuardar = async () => {
     try {
-      const res = await fetch(`${environment.API}/api/Pacientes/${id}/macros`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch(`${environment.API}/api/Pacientes/editar-valores-nutricionales/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error();
@@ -130,9 +129,9 @@ export default function PacienteDetallePage() {
     if (paciente) {
       setForm({
         calorias: paciente.calorias,
-        porcentajeGrasas: paciente.porcentajeGrasas,
-        porcentajeCarbohidratos: paciente.porcentajeCarbohidratos,
-        porcentajeProteinas: paciente.porcentajeProteinas,
+        grasas: paciente.paciente.grasas,
+        carbohidratos: paciente.paciente.porcentajeCarbohidratos,
+        proteinas: paciente.paciente.porcentajeProteinas,
       });
     }
     setModoEdicion(false);
@@ -155,17 +154,17 @@ export default function PacienteDetallePage() {
         <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Nombre</p><p className="text-lg font-semibold">{paciente.nombre}</p></div>
         <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Email</p><p className="text-lg font-semibold">{paciente.email}</p></div>
         <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Edad</p><p className="text-lg font-semibold">{edad} años</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Peso</p><p className="text-lg font-semibold">{paciente.peso} kg</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Altura</p><p className="text-lg font-semibold">{paciente.altura} cm</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Sexo</p><p className="text-lg font-semibold">{paciente.sexo}</p></div>
+        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Peso</p><p className="text-lg font-semibold">{paciente.paciente.peso} kg</p></div>
+        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Altura</p><p className="text-lg font-semibold">{paciente.paciente.altura} cm</p></div>
+        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Sexo</p><p className="text-lg font-semibold">{paciente.paciente.sexo}</p></div>
       </div>
 
       <div className="bg-gray-700 p-4 rounded-md mb-8">
         <h2 className="text-xl font-semibold mb-3">🔬 Recomendaciones nutricionales</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {["calorias", "porcentajeGrasas", "porcentajeCarbohidratos", "porcentajeProteinas"].map((field) => (
+          {["calorias", "grasas", "carbohidratos", "proteinas"].map((field) => (
             <div key={field}>
-              <label className="text-sm block mb-1 capitalize">{field.replace("porcentaje", "% ").replace("calorias", "Calorías")}</label>
+              <label className="text-sm block mb-1 capitalize">{field} {field === 'calorias' ? '' : '(%)'}</label>
               <input
                 name={field}
                 type="number"
@@ -196,7 +195,7 @@ export default function PacienteDetallePage() {
         <ul className="space-y-2">
           {comidas.length > 0 ? comidas.map((comida) => (
             <li key={comida.id} className="border border-gray-600 p-3 rounded-md bg-gray-900">
-              <span className="font-semibold">{comida.nombre}</span> — {comida.calorias} kcal
+              <span className="font-semibold">{comida.nombre}</span> — {comida.kcal} kcal
             </li>
           )) : (
             <p className="text-gray-400">No hay comidas asignadas aún.</p>
