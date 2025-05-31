@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body className={`${montserrat.className} bg-black text-white flex items-center justify-center min-h-screen`}>
-        {children}
-      </body>
-    </html>
+    <div className={`${montserrat.className} bg-black text-white flex items-center justify-center min-h-screen`}>
+      {children}
+    </div>
+    // <html lang="es">
+    // </html>
   );
 }

@@ -14,7 +14,7 @@ export default function SideBarBtn({ item, isActive }: { item: Item, isActive: b
             className={
                 clsx(
                     isActive ? 'text-[#4AFF50]' : 'text-white',
-                    'flex gap-5 items-center justify-center cursor-pointer p-2 rounded-md transition-all duration-200 hover:bg-[#363636]'
+                    'flex gap-5 flex-col xl:flex-row items-center justify-center cursor-pointer p-2 rounded-md transition-all duration-200 hover:bg-[#363636]'
                 )
             }
             href={item.ruta}

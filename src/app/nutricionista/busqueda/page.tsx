@@ -11,7 +11,7 @@ interface Paciente {
   peso: number;
   altura: number;
   sexo: string;
-  caloriasRecomendadas: number;
+  calorias: number;
 }
 
 export default function BusquedaPacientesPage() {
@@ -56,10 +56,10 @@ export default function BusquedaPacientesPage() {
     if (!pacienteSeleccionado) return;
 
     try {
-      const res = await fetch("/api/Nutricionistas/vincular", {
+      const res = await fetch(`${environment.API}/api/Nutricionistas/agregar-paciente?pacienteId=${pacienteSeleccionado.id}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pacienteId: pacienteSeleccionado.id }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
+        body: null,
       });
 
       if (!res.ok) throw new Error("Error al vincular paciente");
@@ -97,9 +97,10 @@ export default function BusquedaPacientesPage() {
           <button
             key={paciente.id}
             onClick={() => handleAbrirModal(paciente)}
-            className="w-full text-left p-2 border rounded-md hover:bg-white hover:text-black transition"
+            className="font-bold text-xl w-full text-left p-2 border rounded-md hover:bg-white hover:text-black transition flex flex-col gap-2"
           >
             {paciente.nombre}
+            <span className="text-sm font-normal">{paciente.email}</span>
           </button>
         ))}
       </div>
