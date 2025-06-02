@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   format,
   isSameDay,
@@ -11,21 +11,27 @@ import {
   eachDayOfInterval,
   startOfToday,
 } from "date-fns";
+import { es } from 'date-fns/locale'
 import clsx from "clsx";
 
 const DAYS_VISIBLE = 5;
 
-export default function HorizontalDatePicker() {
+export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: (date: Date) => void }) {
   const today = startOfToday();
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(today));
   const [startIndex, setStartIndex] = useState(0);
 
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date)
+    onDateChange?.(date)
+  }
+
   // Genera todas las fechas del mes actual
-  const dates = eachDayOfInterval({
+  const dates = useMemo(() => eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
-  });
+  }), [currentMonth]);
 
   // Subset visible
   const visibleDates = dates.slice(startIndex, startIndex + DAYS_VISIBLE);
@@ -70,7 +76,7 @@ export default function HorizontalDatePicker() {
       {/* Header con mes actual y navegación */}
       <div className="flex justify-between items-center text-white mb-2 w-full">
         <button onClick={goToPrevMonth}>←</button>
-        <span className="font-semibold">{format(currentMonth, "MMMM yyyy")}</span>
+        <span className="font-semibold">{format(currentMonth, "MMMM yyyy", { locale: es })}</span>
         <button onClick={goToNextMonth}>→</button>
       </div>
 
@@ -87,22 +93,22 @@ export default function HorizontalDatePicker() {
         <div className="flex gap-4 justify-center items-center overflow-hidden flex-1">
           {visibleDates.map((date) => {
             const isActive = isSameDay(date, selectedDate);
-            const key = format(date, "yyyy-MM-dd");
+            const key = format(date, "yyyy-MM-dd", { locale: es });
 
             return (
               <div
                 key={key}
-                onClick={() => setSelectedDate(date)}
+                onClick={() => handleDateSelect(date)}
                 className={clsx(
                   "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
                   isActive ? "text-[#4AFF50]" : "text-white"
                 )}
               >
                 <span className="text-xs font-semibold uppercase">
-                  {format(date, "EEE")}
+                  {format(date, "EEE", { locale: es })}
                 </span>
                 <span className="text-sm font-medium">
-                  {format(date, "dd/MM")}
+                  {format(date, "dd/MM", { locale: es })}
                 </span>
                 <div 
                     className={clsx(

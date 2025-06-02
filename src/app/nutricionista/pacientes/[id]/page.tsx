@@ -92,7 +92,11 @@ export default function PacienteDetallePage() {
 
   const fetchComidasPaciente = async () => {
     try {
-      const res = await fetch(`${environment.API}/api/Pacientes/comidas/${id}`);
+      const res = await fetch(`${environment.API}/api/Pacientes/comidas`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+      });
       if (!res.ok) throw new Error("Error al cargar comidas");
       const data = await res.json();
       setComidas(data);
