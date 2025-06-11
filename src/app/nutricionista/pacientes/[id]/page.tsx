@@ -28,7 +28,7 @@ interface Paciente {
 interface Comida {
   id: string;
   nombre: string;
-  calorias: number;
+  kcal: number;
 }
 
 export default function PacienteDetallePage() {
@@ -92,11 +92,7 @@ export default function PacienteDetallePage() {
 
   const fetchComidasPaciente = async () => {
     try {
-      const res = await fetch(`${environment.API}/api/Pacientes/comidas`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        }
-      });
+      const res = await fetch(`${environment.API}/api/Pacientes/comidas/${id}`);
       if (!res.ok) throw new Error("Error al cargar comidas");
       const data = await res.json();
       setComidas(data);
@@ -156,7 +152,7 @@ export default function PacienteDetallePage() {
     if (id) {
       fetchPaciente();
       fetchComidasPaciente();
-      fetchComidasRegistradas();
+      // fetchComidasRegistradas();
     }
   }, [id]);
 
