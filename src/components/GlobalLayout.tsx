@@ -76,7 +76,15 @@ const pacienteItems = [
 ]
 
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<string>("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const role = getUserRoleFromToken(token);
+      if (role) setRole(role);
+    }
+  })
 
   function getUserRoleFromToken(token: string): string | null {
     try {
@@ -85,18 +93,6 @@ export default function GlobalLayout({ children }: { children: React.ReactNode }
     } catch (error) {
       return null;
     }
-  }
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const role = getUserRoleFromToken(token);
-      setRole(role);
-    }
-  })
-
-  if (!role) {
-    return null; // O puedes mostrar un loading spinner aquí
   }
 
   const itemsByRole: Record<string, any[]> = {
