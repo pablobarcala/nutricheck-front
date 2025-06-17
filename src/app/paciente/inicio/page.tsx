@@ -88,7 +88,7 @@ export default function Inicio() {
   };
 
   return (
-    <div className="p-4">
+    <div className="py-10">
       <HorizontalDatePicker
         onDateChange={(date) => setSelectedDay(format(date, "yyyy-MM-dd"))}
       />
@@ -115,16 +115,16 @@ export default function Inicio() {
           fetchComidasPaciente();
           setModalComidasPaciente(true);
         }}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="bg-green-800 text-white px-4 py-2 rounded"
       >
         Registrar comida desde lista
       </button>
 
       {/* Modal */}
       {modalComidasPaciente && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4">Registrar comida</h2>
+            <h2 className="text-lg font-bold mb-4 text-black">Registrar comida</h2>
 
             {/* Horarios */}
             <div className="flex gap-2 mb-4 flex-wrap">

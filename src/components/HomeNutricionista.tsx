@@ -49,17 +49,17 @@ export default function HomeNutricionista() {
                 flex 
                 flex-col
                 gap-5
-                py-5
+                py-10
                 w-full
             "
         >
-            <p className="font-bold text-xl">{saludo}, Juan</p>
+            <p className="font-bold text-3xl">{saludo}, Juan</p>
             <HorizontalDatePicker />
             <p className="font-bold ">Pacientes</p>
             <form action="" className="w-[30%] flex items-center gap-4">
                 <input 
                     type="text" 
-                    className="bg-white rounded-md px-4 py-2 text-black w-full focus-within:outline-none"
+                    className="bg-neutral-100 dark:bg-neutral-100/10 rounded-md px-4 py-2 w-full focus-within:outline-none"
                     placeholder="Buscar paciente"
                 />
                 <button 

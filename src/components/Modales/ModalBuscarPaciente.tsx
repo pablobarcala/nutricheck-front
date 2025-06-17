@@ -89,9 +89,9 @@ export default function ModalBuscarPaciente({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-start pt-20 z-50">
-      <div className="bg-gray-800 p-6 rounded-md w-[90%] max-w-xl">
-        <h2 className="text-xl font-semibold mb-4">Buscar paciente</h2>
+    <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
+      <div className="bg-neutral-900 p-6 rounded-md w-[90%] max-w-xl">
+        <h2 className="text-white text-xl font-semibold mb-4">Buscar paciente</h2>
 
         <div className="flex gap-2 mb-4">
           <input
@@ -114,7 +114,7 @@ export default function ModalBuscarPaciente({
             <button
               key={paciente.id}
               onClick={() => handleSeleccionarPaciente(paciente)}
-              className="font-bold text-left w-full border rounded-md p-2 hover:bg-white hover:text-black transition flex flex-col gap-1"
+              className="text-white border-neutral-100/10 font-bold text-left w-full border rounded-md p-2 hover:bg-white hover:text-black transition flex flex-col gap-1"
             >
               {paciente.nombre}
               <span className="text-sm font-normal">{paciente.email}</span>

@@ -156,22 +156,22 @@ export default function PacienteDetallePage() {
     }
   }, [id]);
 
-  if (!paciente) return <div className="p-4 text-white">Cargando datos del paciente...</div>;
+  if (!paciente) return <div className="p-4">Cargando datos del paciente...</div>;
 
   return (
-    <div className="p-4 text-white font-[Montserrat]">
+    <div className="py-10 font-[Montserrat]">
       <h1 className="text-2xl font-bold mb-6">Información del Paciente</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Nombre</p><p className="text-lg font-semibold">{paciente.nombre}</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Email</p><p className="text-lg font-semibold">{paciente.email}</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Edad</p><p className="text-lg font-semibold">{edad} años</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Peso</p><p className="text-lg font-semibold">{paciente.paciente.peso} kg</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Altura</p><p className="text-lg font-semibold">{paciente.paciente.altura} cm</p></div>
-        <div className="bg-gray-600 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Sexo</p><p className="text-lg font-semibold">{paciente.paciente.sexo}</p></div>
+        <div className="bg-neutral-100 dark:bg-neutral-100/10 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Nombre</p><p className="text-lg font-semibold">{paciente.nombre}</p></div>
+        <div className="bg-neutral-100 dark:bg-neutral-100/10 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Email</p><p className="text-lg font-semibold">{paciente.email}</p></div>
+        <div className="bg-neutral-100 dark:bg-neutral-100/10 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Edad</p><p className="text-lg font-semibold">{edad} años</p></div>
+        <div className="bg-neutral-100 dark:bg-neutral-100/10 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Peso</p><p className="text-lg font-semibold">{paciente.paciente.peso} kg</p></div>
+        <div className="bg-neutral-100 dark:bg-neutral-100/10 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Altura</p><p className="text-lg font-semibold">{paciente.paciente.altura} cm</p></div>
+        <div className="bg-neutral-100 dark:bg-neutral-100/10 p-4 rounded-lg shadow"><p className="text-sm text-gray-400">Sexo</p><p className="text-lg font-semibold">{paciente.paciente.sexo}</p></div>
       </div>
 
-      <div className="bg-gray-700 p-4 rounded-md mb-8">
+      <div className="bg-green-100 dark:bg-green-800 p-4 rounded-md mb-8">
         <h2 className="text-xl font-semibold mb-3">🔬 Recomendaciones nutricionales</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {["calorias", "grasas", "carbohidratos", "proteinas"].map((field) => (
@@ -183,7 +183,7 @@ export default function PacienteDetallePage() {
                 value={(form as any)[field]}
                 onChange={handleChange}
                 disabled={!modoEdicion}
-                className="w-full bg-black border border-white rounded-md p-2"
+                className="w-full border border-green-200 dark:border-green-700 rounded-md p-2"
               />
             </div>
           ))}
@@ -193,10 +193,10 @@ export default function PacienteDetallePage() {
             {modoEdicion ? (
               <>
                 <button onClick={handleGuardar} className="bg-green-500 px-4 py-1 rounded-md">Guardar</button>
-                <button onClick={handleCancelar} className="bg-gray-500 px-4 py-1 rounded-md">Cancelar</button>
+                <button onClick={handleCancelar} className="bg-gray-500 px-4 py-1 rounded-md text-white">Cancelar</button>
               </>
             ) : (
-              <button onClick={() => setModoEdicion(true)} className="bg-blue-500 px-4 py-1 rounded-md">Editar</button>
+              <button onClick={() => setModoEdicion(true)} className="bg-blue-500 px-4 py-1 rounded-md text-white">Editar</button>
             )}
           </div>
         )}
@@ -206,7 +206,7 @@ export default function PacienteDetallePage() {
         <h2 className="text-xl font-semibold mb-3"> Comidas asignadas</h2>
         <ul className="space-y-2">
           {comidas.length > 0 ? comidas.map((comida) => (
-            <li key={comida.id} className="border border-gray-600 p-3 rounded-md bg-gray-900">
+            <li key={comida.id} className="border border-neutral-200 dark:border-neutral-200/10 p-3 rounded-md bg-neutral-100 dark:bg-neutral-100/10">
               <span className="font-semibold">{comida.nombre}</span> — {comida.kcal} kcal
             </li>
           )) : (

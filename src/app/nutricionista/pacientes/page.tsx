@@ -31,15 +31,15 @@ export default function MisPacientesPage() {
   }, []);
 
   return (
-    <div className="p-4 text-white font-[Montserrat] relative">
-      <h1 className="text-2xl font-bold mb-4">Pacientes</h1>
+    <div className="py-10 w-full font-[Montserrat] relative">
+      <h1 className="text-3xl font-bold mb-4">Pacientes</h1>
 
-      <div className="flex gap-4 flex-wrap justify-center items-center">
+      <div className="flex gap-4 flex-wrap justify-start items-center">
         {pacientes.map((paciente: any) => (
           <button
             key={paciente.id}
             onClick={() => router.push(`/nutricionista/pacientes/${paciente.id}`)}
-            className="font-bold text-xl flex flex-col gap-2 text-left py-2 pl-2 pr-24 border rounded-md hover:bg-white hover:text-black transition"
+            className="bg-neutral-100 dark:bg-neutral-100/10 font-bold text-xl flex flex-col gap-2 text-left py-2 pl-2 pr-24 border border-neutral-200 dark:border-neutral-200/10 rounded-md hover:bg-white hover:text-black transition"
           >
             {paciente.nombre}
             <span className="text-sm font-normal">{paciente.email}</span>

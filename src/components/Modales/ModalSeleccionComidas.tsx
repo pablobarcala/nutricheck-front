@@ -43,7 +43,7 @@ export default function SeleccionarComidaModal({ onClose, onVincular }: Props) {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full text-black">
         <h2 className="text-xl font-bold mb-4">Seleccionar Comida</h2>
 

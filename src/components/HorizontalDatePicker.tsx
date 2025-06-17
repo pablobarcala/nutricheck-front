@@ -72,9 +72,9 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
   }, [currentMonth]);
 
   return (
-    <div className="flex flex-col gap-2 bg-black px-4 py-2 w-full mx-auto">
+    <div className="flex flex-col gap-2 px-4 py-2 w-full mx-auto">
       {/* Header con mes actual y navegación */}
-      <div className="flex justify-between items-center text-white mb-2 w-full">
+      <div className="flex justify-between items-center mb-2 w-full">
         <button onClick={goToPrevMonth}>←</button>
         <span className="font-semibold">{format(currentMonth, "MMMM yyyy", { locale: es })}</span>
         <button onClick={goToNextMonth}>→</button>
@@ -85,7 +85,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
         <button
           onClick={scrollLeft}
           disabled={startIndex === 0}
-          className="text-white px-2 disabled:opacity-30"
+          className="px-2 disabled:opacity-30"
         >
           ←
         </button>
@@ -101,7 +101,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
                 onClick={() => handleDateSelect(date)}
                 className={clsx(
                   "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
-                  isActive ? "text-[#4AFF50]" : "text-white"
+                  isActive ? "text-[#09c70f] bg-green-200 dark:bg-[#4AF550]/10 border border-[#4AF550]/30 dark:text-[#4AFF50]" : ""
                 )}
               >
                 <span className="text-xs font-semibold uppercase">
@@ -110,12 +110,12 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
                 <span className="text-sm font-medium">
                   {format(date, "dd/MM", { locale: es })}
                 </span>
-                <div 
+                {/* <div 
                     className={clsx(
                         "mt-1 w-full h-[2px]",
                         isActive ? "bg-[#4AFF50]" : "bg-transparent"
                     )} 
-                />
+                /> */}
               </div>
             );
           })}
@@ -124,7 +124,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
         <button
           onClick={scrollRight}
           disabled={startIndex + DAYS_VISIBLE >= dates.length}
-          className="text-white px-2 disabled:opacity-30"
+          className="px-2 disabled:opacity-30"
         >
           →
         </button>

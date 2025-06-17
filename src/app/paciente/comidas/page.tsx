@@ -104,7 +104,7 @@ if (isNaN(calorias) || calorias <= 0) {
   }, []);
 
   return (
-    <div className="p-4 text-white font-[Montserrat]">
+    <div className="py-10 font-[Montserrat]">
       <h1 className="text-2xl font-bold mb-6">Mis Comidas</h1>
 
       {comidas.map((comida) => (
