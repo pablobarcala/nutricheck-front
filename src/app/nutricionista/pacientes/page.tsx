@@ -39,7 +39,7 @@ export default function MisPacientesPage() {
           <button
             key={paciente.id}
             onClick={() => router.push(`/nutricionista/pacientes/${paciente.id}`)}
-            className="bg-neutral-100 dark:bg-neutral-100/10 font-bold text-xl flex flex-col gap-2 text-left py-2 pl-2 pr-24 border border-neutral-200 dark:border-neutral-200/10 rounded-md hover:bg-white hover:text-black transition"
+            className="cursor-pointer bg-neutral-100 dark:bg-neutral-100/10 font-bold text-xl flex flex-col gap-2 text-left py-2 pl-2 pr-24 border border-neutral-200 dark:border-neutral-200/10 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition"
           >
             {paciente.nombre}
             <span className="text-sm font-normal">{paciente.email}</span>

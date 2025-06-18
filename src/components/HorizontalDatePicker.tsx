@@ -75,9 +75,9 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
     <div className="flex flex-col gap-2 px-4 py-2 w-full mx-auto">
       {/* Header con mes actual y navegación */}
       <div className="flex justify-between items-center mb-2 w-full">
-        <button onClick={goToPrevMonth}>←</button>
+        <button onClick={goToPrevMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5">←</button>
         <span className="font-semibold">{format(currentMonth, "MMMM yyyy", { locale: es })}</span>
-        <button onClick={goToNextMonth}>→</button>
+        <button onClick={goToNextMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5">→</button>
       </div>
 
       {/* Carrusel con navegación */}
@@ -85,7 +85,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
         <button
           onClick={scrollLeft}
           disabled={startIndex === 0}
-          className="px-2 disabled:opacity-30"
+          className="p-2 rounded-full cursor-pointer disabled:opacity-30 hover:bg-black/5 dark:hover:bg-white/5"
         >
           ←
         </button>
@@ -100,7 +100,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
                 key={key}
                 onClick={() => handleDateSelect(date)}
                 className={clsx(
-                  "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
+                  "flex flex-col items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
                   isActive ? "text-[#09c70f] bg-green-200 dark:bg-[#4AF550]/10 border border-[#4AF550]/30 dark:text-[#4AFF50]" : ""
                 )}
               >
@@ -124,7 +124,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
         <button
           onClick={scrollRight}
           disabled={startIndex + DAYS_VISIBLE >= dates.length}
-          className="px-2 disabled:opacity-30"
+          className="p-2 rounded-full cursor-pointer disabled:opacity-30 hover:bg-black/5 dark:hover:bg-white/5"
         >
           →
         </button>

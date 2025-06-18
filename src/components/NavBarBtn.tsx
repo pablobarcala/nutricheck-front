@@ -18,7 +18,7 @@ export default function NavBarBtn({ item, isActive }: { item: Item, isActive: bo
                     `,
                     isActive
                         ? 'text-[#4AFF50] bg-[#4AFF50]/10 border border-[#4AFF50]/30'
-                        : 'text-white hover:text-[#4AFF50] hover:bg-[#363636]'
+                        : 'text-white border border-transparent hover:text-[#4AFF50] hover:bg-[#363636]'
                 )}
                 href={item.ruta}
             >
