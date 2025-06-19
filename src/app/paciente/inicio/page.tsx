@@ -27,7 +27,7 @@ export default function Inicio() {
 
         const data = await res.json();
 
-        setComidasPaciente(data);
+        // setComidasPaciente(data);
 
         // Filtra comidas para el día seleccionado
         const filtradas = data.filter((c: any) => c.fecha === selectedDay);
@@ -79,6 +79,12 @@ export default function Inicio() {
 
       if (!res.ok) throw new Error();
       alert("Comida registrada con éxito");
+
+      setComidasDelDia((prev) => ({
+        ...prev,
+        [selectedDay]: [...(prev[selectedDay] || []), body]
+      }));
+
       setModalComidasPaciente(false);
       setComidaSeleccionada(null);
       setHorarioSeleccionado("");
@@ -96,7 +102,7 @@ export default function Inicio() {
       <div className="mt-6">
         <h2 className="text-xl font-bold">Comidas del día {selectedDay}</h2>
         {(comidasDelDia[selectedDay] || []).map((c, i) => (
-          <div key={i} className="border p-2 my-2 rounded">
+          <div key={i} className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 px-2 py-6 my-2 rounded-md">
             <span className="font-semibold">{c.horario}:</span> {c.nombre}
           </div>
         ))}
