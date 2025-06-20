@@ -4,6 +4,7 @@ import HorizontalDatePicker from "@/components/HorizontalDatePicker";
 import { environment } from "@/environment/environment";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
+import { registrarComidaAPI, updateComidasDelDia, validateComidaData } from "@/services/comidaService";
 
 const horarios = ["Desayuno", "Almuerzo", "Merienda", "Cena"];
 
@@ -61,29 +62,24 @@ export default function Inicio() {
   };
 
   const registrarComida = async () => {
-    if (!comidaSeleccionada || !horarioSeleccionado || !selectedDay) return;
-
-    const body = {
-      fecha: selectedDay,
-      horario: horarioSeleccionado,
-      comidaId: comidaSeleccionada.id,
-      nombre: comidaSeleccionada.nombre
-    };
+    const validation = validateComidaData(comidaSeleccionada, horarioSeleccionado, selectedDay)
+    if (!validation.isValid) {
+      alert(validation.error);
+      return;
+    }
 
     try {
-      const res = await fetch(`${environment.API}/api/Pacientes/registrar-comida`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
-        body: JSON.stringify(body),
-      });
+      const result = await registrarComidaAPI({
+        selectedDay, 
+        horarioSeleccionado,
+        comidaSeleccionada
+      }, localStorage.getItem("token"), environment.API);
 
-      if (!res.ok) throw new Error();
       alert("Comida registrada con éxito");
 
-      setComidasDelDia((prev) => ({
-        ...prev,
-        [selectedDay]: [...(prev[selectedDay] || []), body]
-      }));
+      setComidasDelDia((prev) => 
+        updateComidasDelDia(prev, selectedDay, result.data)
+      );
 
       setModalComidasPaciente(false);
       setComidaSeleccionada(null);
