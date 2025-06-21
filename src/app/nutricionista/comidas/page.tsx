@@ -76,7 +76,7 @@ export default function ComidasNutricionistaPage() {
         e.preventDefault();
 
         try {
-            const response = await fetch("https://localhost:7147/api/Comidas/crear", {
+            const response = await fetch(environment.API+"/api/Comidas/crear", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
