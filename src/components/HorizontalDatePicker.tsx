@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   format,
   isSameDay,
@@ -11,21 +11,27 @@ import {
   eachDayOfInterval,
   startOfToday,
 } from "date-fns";
+import { es } from 'date-fns/locale'
 import clsx from "clsx";
 
 const DAYS_VISIBLE = 5;
 
-export default function HorizontalDatePicker() {
+export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: (date: Date) => void }) {
   const today = startOfToday();
   const [selectedDate, setSelectedDate] = useState(today);
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(today));
   const [startIndex, setStartIndex] = useState(0);
 
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date)
+    onDateChange?.(date)
+  }
+
   // Genera todas las fechas del mes actual
-  const dates = eachDayOfInterval({
+  const dates = useMemo(() => eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
-  });
+  }), [currentMonth]);
 
   // Subset visible
   const visibleDates = dates.slice(startIndex, startIndex + DAYS_VISIBLE);
@@ -66,12 +72,12 @@ export default function HorizontalDatePicker() {
   }, [currentMonth]);
 
   return (
-    <div className="flex flex-col gap-2 bg-black px-4 py-2 w-full mx-auto">
+    <div className="flex flex-col gap-2 px-4 py-2 w-full mx-auto">
       {/* Header con mes actual y navegación */}
-      <div className="flex justify-between items-center text-white mb-2 w-full">
-        <button onClick={goToPrevMonth}>←</button>
-        <span className="font-semibold">{format(currentMonth, "MMMM yyyy")}</span>
-        <button onClick={goToNextMonth}>→</button>
+      <div className="flex justify-between items-center mb-2 w-full">
+        <button onClick={goToPrevMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5">←</button>
+        <span className="font-semibold">{format(currentMonth, "MMMM yyyy", { locale: es })}</span>
+        <button onClick={goToNextMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5">→</button>
       </div>
 
       {/* Carrusel con navegación */}
@@ -79,7 +85,7 @@ export default function HorizontalDatePicker() {
         <button
           onClick={scrollLeft}
           disabled={startIndex === 0}
-          className="text-white px-2 disabled:opacity-30"
+          className="p-2 rounded-full cursor-pointer disabled:opacity-30 hover:bg-black/5 dark:hover:bg-white/5"
         >
           ←
         </button>
@@ -87,29 +93,29 @@ export default function HorizontalDatePicker() {
         <div className="flex gap-4 justify-center items-center overflow-hidden flex-1">
           {visibleDates.map((date) => {
             const isActive = isSameDay(date, selectedDate);
-            const key = format(date, "yyyy-MM-dd");
+            const key = format(date, "yyyy-MM-dd", { locale: es });
 
             return (
               <div
                 key={key}
-                onClick={() => setSelectedDate(date)}
+                onClick={() => handleDateSelect(date)}
                 className={clsx(
-                  "flex flex-col items-center cursor-pointer px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
-                  isActive ? "text-[#4AFF50]" : "text-white"
+                  "flex flex-col items-center cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 px-3 py-1 rounded-md transition gap-1 min-w-[60px] w-[20%]",
+                  isActive ? "text-[#09c70f] bg-green-200 dark:bg-[#4AF550]/10 border border-[#4AF550]/30 dark:text-[#4AFF50]" : ""
                 )}
               >
                 <span className="text-xs font-semibold uppercase">
-                  {format(date, "EEE")}
+                  {format(date, "EEE", { locale: es })}
                 </span>
                 <span className="text-sm font-medium">
-                  {format(date, "dd/MM")}
+                  {format(date, "dd/MM", { locale: es })}
                 </span>
-                <div 
+                {/* <div 
                     className={clsx(
                         "mt-1 w-full h-[2px]",
                         isActive ? "bg-[#4AFF50]" : "bg-transparent"
                     )} 
-                />
+                /> */}
               </div>
             );
           })}
@@ -118,7 +124,7 @@ export default function HorizontalDatePicker() {
         <button
           onClick={scrollRight}
           disabled={startIndex + DAYS_VISIBLE >= dates.length}
-          className="text-white px-2 disabled:opacity-30"
+          className="p-2 rounded-full cursor-pointer disabled:opacity-30 hover:bg-black/5 dark:hover:bg-white/5"
         >
           →
         </button>

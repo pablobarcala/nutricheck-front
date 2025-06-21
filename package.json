@@ -6,12 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "mocha"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "jwt-decode": "^4.0.0",
+    "lucide-react": "^0.516.0",
     "next": "15.3.0",
+    "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -21,8 +25,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chai": "^5.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
+    "mocha": "^11.7.0",
+    "nyc": "^17.1.0",
+    "sinon": "^21.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
