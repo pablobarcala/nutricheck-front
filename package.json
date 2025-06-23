@@ -2,12 +2,14 @@
   "name": "nutricheck-front",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "mocha"
+    "test": "node --loader ts-node/esm node_modules/mocha/bin/mocha.js --ts-node-project tsconfig.test.json \"test/**/*.test.ts\"",
+    "test:unit": "node --loader ts-node/esm node_modules/mocha/bin/mocha.js --ts-node-project tsconfig.test.json \"test/unit/clasificarPorHorario.test.ts\""
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -22,16 +24,21 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sinon": "^10.0.14",
     "chai": "^5.2.0",
+    "chai-http": "^5.1.2",
     "eslint": "^9",
     "eslint-config-next": "15.3.0",
     "mocha": "^11.7.0",
     "nyc": "^17.1.0",
     "sinon": "^21.0.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
