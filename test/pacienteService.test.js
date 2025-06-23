@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { agregarPacienteAPI, buscarPacienteAPI } from '../src/services/pacienteService.js';
+import { agregarPacienteAPI, buscarPacienteAPI,buscarPacientePorNombreAPI,
+  vincularPacienteANutricionistaAPI } from '../src/services/pacienteService.js';
 
 describe('PacienteService', () => {
   let fetchStub;
@@ -44,6 +45,33 @@ describe('PacienteService', () => {
       }
     });
   });
+  describe('buscarPacientePorNombreAPI', () => {
+    it('debe retornar pacientes cuando la búsqueda es exitosa', async () => {
+      const nombre = 'Juan';
+      const fakeResponse = [{ id: 1, nombre: 'Juan', fechaNacimiento: '1990-01-01' }];
+
+      fetchStub.resolves({
+        ok: true,
+        json: async () => fakeResponse,
+      });
+
+      const result = await buscarPacientePorNombreAPI(nombre, apiUrl);
+      expect(result).to.deep.equal(fakeResponse);
+      expect(fetchStub.calledOnce).to.be.true;
+    });
+
+    it('debe lanzar error si la búsqueda falla', async () => {
+      fetchStub.resolves({ ok: false, status: 404 });
+
+      try {
+        await buscarPacientePorNombreAPI('Juan', apiUrl);
+        throw new Error('No debería llegar aquí');
+      } catch (err) {
+        expect(err.message).to.include('HTTP error');
+      }
+    });
+  });
+
 
   describe('buscarPacienteAPI', () => {
     it('debe retornar datos del paciente cuando la respuesta es exitosa', async () => {
@@ -72,6 +100,35 @@ describe('PacienteService', () => {
       } catch (err) {
         expect(err.message).to.include('HTTP error');
       }
+
+    });
+    
+  });
+  describe('vincularPacienteANutricionistaAPI', () => {
+    it('debe vincular paciente correctamente cuando la respuesta es exitosa', async () => {
+      const pacienteId = 1;
+      const fakeResponse = { mensaje: 'Paciente vinculado' };
+
+      fetchStub.resolves({
+        ok: true,
+        json: async () => fakeResponse,
+      });
+
+      const result = await vincularPacienteANutricionistaAPI(pacienteId, token, apiUrl);
+      expect(result).to.deep.equal(fakeResponse);
+      expect(fetchStub.calledOnce).to.be.true;
+    });
+
+    it('debe lanzar error si la vinculación falla', async () => {
+      fetchStub.resolves({ ok: false, status: 500 });
+
+      try {
+        await vincularPacienteANutricionistaAPI(1, token, apiUrl);
+        throw new Error('No debería llegar aquí');
+      } catch (err) {
+        expect(err.message).to.include('HTTP error');
+      }
     });
   });
+  
 });
