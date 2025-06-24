@@ -1,0 +1,105 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-06-23T21:41:37.916Z",
+    "end": "2025-06-23T21:41:44.290Z",
+    "duration": 6374,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "14716db2-bea1-4807-9067-1a1017f0b7bd",
+      "title": "",
+      "fullFile": "cypress\\e2e\\spec.cy.ts",
+      "file": "cypress\\e2e\\spec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "25a8a655-e10e-4e7b-8d10-765bb6bc99f1",
+          "title": "Flujo completo: Login, buscar paciente, vincular y logout",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Realiza el flujo completo correctamente",
+              "fullTitle": "Flujo completo: Login, buscar paciente, vincular y logout Realiza el flujo completo correctamente",
+              "timedOut": null,
+              "duration": 4136,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit('http://localhost:3000/login');\ncy.get('#email').type('pablo2@correo.com');\ncy.get('#password').type('12345678');\ncy.get('.from-\\\\[\\\\#4AFF50\\\\]').click();\ncy.get('body').click();\ncy.get(':nth-child(3) > .flex').click();\ncy.get('.fixed').click();\ncy.get('.bg-neutral-900 > .flex > .p-2').type('Paciente');\ncy.get('.bg-\\\\[\\\\#4AFF50\\\\]').click();\ncy.get('button.text-white.rounded-md.font-bold').click();\ncy.get('.flex > .bg-green-500').click();\ncy.get('.space-x-4 > .cursor-pointer').click();",
+              "err": {},
+              "uuid": "9ec512e3-42a5-4b31-b67c-5c5ea9d1c97f",
+              "parentUUID": "25a8a655-e10e-4e7b-8d10-765bb6bc99f1",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "9ec512e3-42a5-4b31-b67c-5c5ea9d1c97f"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 4136,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": false,
+        "html": true,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

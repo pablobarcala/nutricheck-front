@@ -56,11 +56,11 @@ Ejecutar frontend con npm run dev y backend con su comando correspondiente
 Testing Unitario
 Para el frontend se implementaron pruebas unitarias con Mocha, Chai y Sinon, que cubren las funciones del servicio:
 
-agregarPacienteAPI
+
 
 buscarPacientePorNombreAPI
 
-buscarPacienteAPI
+
 
 vincularPacienteANutricionistaAPI
 
