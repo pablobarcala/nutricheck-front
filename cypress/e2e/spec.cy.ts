@@ -8,7 +8,7 @@ describe('Flujo completo: Login, buscar paciente, vincular y logout', () => {
     cy.get('body').click();
     cy.get(':nth-child(3) > .flex').click();
     cy.get('.fixed').click();
-    cy.get('.bg-neutral-900 > .flex > .p-2').type('Paciente');
+    cy.get('.bg-neutral-900 > .flex > .p-2').type('Test Paciente');
     cy.get('.bg-\\[\\#4AFF50\\]').click();
     cy.get('button.text-white.rounded-md.font-bold').click();
     cy.on('window:alert', (txt) => {
