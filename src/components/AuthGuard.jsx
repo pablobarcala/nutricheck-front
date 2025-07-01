@@ -12,6 +12,7 @@ const AuthGuard = ({ children }) => {
 
   useEffect(() => {
     checkAuthAndRedirect();
+    setIsLoading(false)
   }, [pathname]);
 
   const checkAuthAndRedirect = () => {
@@ -32,8 +33,6 @@ const AuthGuard = ({ children }) => {
 
       // Decodificar y validar token
       const decodedToken = jwtDecode(token);
-
-      console.log('Token decodificado:', decodedToken);
 
       const currentTime = Date.now() / 1000;
 

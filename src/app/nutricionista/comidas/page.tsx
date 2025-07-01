@@ -151,7 +151,7 @@ export default function ComidasNutricionistaPage() {
           <div
             key={index}
             onClick={() => setComidaSeleccionada(item)}
-            className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 p-4 rounded shadow cursor-pointer hover:bg-neutral-200 transition"
+            className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 p-4 rounded shadow cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-100/5 transition"
           >
             <h2 className="text-lg font-semibold text-green-700">{item.nombre}</h2>
             <p>Kcal: {item.kcal}</p>

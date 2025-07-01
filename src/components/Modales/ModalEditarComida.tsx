@@ -36,7 +36,7 @@ export default function ModalEditarComida({ comida, onClose, onUpdate }: {
   const handleGuardar = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${environment.API}/api/Comidas/${form.id}`, {
+      const res = await fetch(`${environment.API}/api/Comidas/editar`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -45,8 +45,15 @@ export default function ModalEditarComida({ comida, onClose, onUpdate }: {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error("Error al actualizar");
-      alert("Comida actualizada");
-      onUpdate();
+      
+      const resultado = await res.json()
+
+      if (resultado) {
+        alert("Comida actualizada");
+        onUpdate();
+      } else {
+        alert("No se pudo actualizar la comida")
+      }
       onClose();
     } catch {
       alert("No se pudo actualizar la comida");
@@ -60,15 +67,21 @@ export default function ModalEditarComida({ comida, onClose, onUpdate }: {
 
     setLoading(true);
     try {
-      const res = await fetch(`${environment.API}/api/Comidas/${form.id}`, {
+      const res = await fetch(`${environment.API}/api/Comidas/eliminar/${form.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       if (!res.ok) throw new Error("Error al eliminar");
-      alert("Comida eliminada");
-      onUpdate();
+      const resultado = await res.json()
+
+      if (resultado) {
+        alert("Comida eliminada"); 
+        onUpdate();
+      } else {
+        alert("No se pudo eliminar la comida")
+      }
       onClose();
     } catch {
       alert("No se pudo eliminar la comida");
@@ -77,7 +90,7 @@ export default function ModalEditarComida({ comida, onClose, onUpdate }: {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white text-black p-6 rounded-lg w-full max-w-md space-y-4">
         <h2 className="text-xl font-bold">Editar comida</h2>
 
@@ -102,6 +115,7 @@ export default function ModalEditarComida({ comida, onClose, onUpdate }: {
             type="number"
             value={form.kcal}
             readOnly
+            disabled
             className="w-full p-2 border border-gray-300 rounded bg-gray-100"
           />
         </div>
