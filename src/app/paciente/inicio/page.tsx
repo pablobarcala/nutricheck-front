@@ -15,6 +15,7 @@ export default function Inicio() {
     const [horarioSeleccionado, setHorarioSeleccionado] = useState("");
     const [selectedDay, setSelectedDay] = useState<string>(format(new Date, "yyyy-MM-dd"));
     const [comidasDelDia, setComidasDelDia] = useState<{ [key: string]: any[] }>({});
+    const [caloriasObjetivo, setCaloriasObjetivo] = useState<number>(2000);
 
   useEffect(() => {
     const fetchComidas = async () => {
@@ -89,12 +90,57 @@ export default function Inicio() {
     }
   };
 
+  useEffect(() => {
+  const fetchCaloriasObjetivo = async () => {
+    try {
+      const res = await fetch(`${environment.API}/api/Pacientes/mis-calorias`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Error al obtener objetivo calórico");
+
+      const data = await res.json();
+      setCaloriasObjetivo(data); // suponiendo que `data` es un número
+    } catch (error) {
+      console.error("Error al obtener calorías objetivo:", error);
+    }
+  };
+
+  fetchCaloriasObjetivo();
+}, []);
+const totalKcalDelDia = (comidasDelDia[selectedDay] || []).reduce(
+  (acc, comida) => acc + (comida.kcal || 0),
+  0
+);
+
+const porcentaje = caloriasObjetivo > 0
+  ? Math.min((totalKcalDelDia / caloriasObjetivo) * 100, 100)
+  : 0;
+
   return (
     <div className="py-10">
       <HorizontalDatePicker
         onDateChange={(date) => setSelectedDay(format(date, "yyyy-MM-dd"))}
       />
+      <div className="mt-8 mb-6">
+  <h2 className="text-xl font-bold mb-2">Tu progreso calórico</h2>
+  <p className="mb-2 text-neutral-700">
+    {totalKcalDelDia} kcal / {caloriasObjetivo} kcal
+  </p>
 
+  <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner">
+    <div
+      className={`h-full text-xs font-medium text-center text-white leading-6 transition-all duration-300 ease-in-out ${
+        totalKcalDelDia >= caloriasObjetivo ? "bg-green-700" : "bg-green-500"
+      }`}
+      style={{ width: `${porcentaje}%` }}
+    >
+      {Math.round(porcentaje)}%
+    </div>
+  </div>
+</div>
       <div className="mt-6">
         <h2 className="text-xl font-bold">Comidas del día {selectedDay}</h2>
         {(comidasDelDia[selectedDay] || []).map((c, i) => (
