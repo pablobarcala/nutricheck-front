@@ -5,6 +5,18 @@ import { useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import SeleccionarComidaModal from "@/components/Modales/ModalSeleccionComidas";
 import { environment } from "@/environment/environment";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
 
 type JwtPayload = {
   id: string;
@@ -260,5 +272,69 @@ export default function PacienteDetallePage() {
         />
       )}
     </div>
+    {/* 📈 Progreso del paciente (sección de gráficos) */}
+<div className="mt-10">
+  <h2 className="text-xl font-semibold mb-6">📊 Progreso del paciente</h2>
+
+  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    {/* Gráfico de cumplimiento calórico diario */}
+    <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+        Cumplimiento calórico diario
+      </h3>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={[] /* reemplazar por cumplimientoCalorico */}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="fecha" />
+          <YAxis domain={[0, 100]} />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="porcentaje"
+            stroke="#16a34a"
+            strokeWidth={3}
+            name="Cumplimiento (%)"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+
+    {/* Gráfico de comidas más registradas */}
+    <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow">
+      <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+        Comidas más registradas (últimos 7 días)
+      </h3>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={[] /* reemplazar por comidasMasRegistradas */}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="nombre" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="cantidad" fill="#22c55e" name="Cantidad" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+
+  {/* Ranking de días con más comidas registradas */}
+  <div className="mt-10 bg-white dark:bg-neutral-800 p-6 rounded-lg shadow">
+    <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">
+      🏆 Días con más comidas registradas (últimos 7 días)
+    </h3>
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={[] /* reemplazar por comidasPorDia */}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="dia" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="cantidad" fill="#10b981" name="Cantidad" />
+      </BarChart>
+    </ResponsiveContainer>
+  </div>
+</div>
+
   );
 }
