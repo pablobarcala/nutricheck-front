@@ -192,7 +192,7 @@ const porcentaje = caloriasObjetivo > 0
             </div>
 
             {/* Lista de comidas */}
-            <div className="max-h-60 overflow-y-auto border rounded">
+            <div className="max-h-60 overflow-y-auto border rounded scroll-custom">
               {comidasPaciente.map((c) => (
                 <div
                   key={c.id}

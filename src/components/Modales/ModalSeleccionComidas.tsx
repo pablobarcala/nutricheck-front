@@ -68,9 +68,11 @@ export default function SeleccionarComidaModal({ onClose, onVincular, comidasVin
 
   return (
   <div className="fixed inset-0 flex items-center justify-center bg-black/80 z-50">
-    <div className="bg-white rounded-lg p-6 max-w-lg w-full text-black max-h-[90vh] overflow-y-auto transition-all duration-300 pb-6">
-      <h2 className="text-xl font-bold mb-4">Vincular comidas al paciente</h2>
+  <div className="bg-white rounded-lg max-w-3xl w-full h-[90vh] flex flex-col p-6 text-black overflow-hidden">
+    <h2 className="text-2xl font-bold mb-4">Vincular comidas al paciente</h2>
 
+    {/* Contenido scrollable */}
+    <div className="flex-1 overflow-y-auto pr-2 scroll-custom">
       {/* Buscador */}
       <input
         type="text"
@@ -84,7 +86,7 @@ export default function SeleccionarComidaModal({ onClose, onVincular, comidasVin
       {loading ? (
         <p>Cargando comidas...</p>
       ) : comidasFiltradas.length > 0 ? (
-        <ul className="space-y-2 max-h-40 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 rounded-md">
+        <ul className="space-y-2 mb-4">
           {comidasFiltradas.map((comida) => (
             <li
               key={comida.id}
@@ -96,7 +98,7 @@ export default function SeleccionarComidaModal({ onClose, onVincular, comidasVin
               </div>
               <button
                 onClick={() => handleSeleccionar(comida)}
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
+                className="cursor-pointer bg-green-500 text-white px-4 py-2 rounded"
               >
                 Seleccionar
               </button>
@@ -109,9 +111,9 @@ export default function SeleccionarComidaModal({ onClose, onVincular, comidasVin
 
       {/* Lista preliminar */}
       {comidasSeleccionadas.length > 0 && (
-        <div className="mb-4 mt-4">
+        <div className="mb-4">
           <h3 className="text-md font-semibold mb-2">Comidas seleccionadas:</h3>
-          <ul className="space-y-2 max-h-32 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-400 scrollbar-track-green-100 rounded-md">
+          <ul className="space-y-2">
             {comidasSeleccionadas.map((comida) => (
               <li
                 key={comida.id}
@@ -129,23 +131,25 @@ export default function SeleccionarComidaModal({ onClose, onVincular, comidasVin
           </ul>
         </div>
       )}
+    </div>
 
-      {/* Acciones */}
-      <div className="flex justify-end gap-4 mt-4">
-        <button
-          onClick={onClose}
-          className="text-sm text-gray-600 hover:underline"
-        >
-          Cancelar
-        </button>
-        <button
-          onClick={() => onVincular(comidasSeleccionadas.map((c) => c.id))}
-          className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
-        >
-          Guardar
-        </button>
-      </div>
+    {/* Acciones abajo */}
+    <div className="flex justify-end gap-4 pt-4">
+      <button
+        onClick={onClose}
+        className="text-sm text-gray-600 hover:underline"
+      >
+        Cancelar
+      </button>
+      <button
+        onClick={() => onVincular(comidasSeleccionadas.map((c) => c.id))}
+        className="cursor-pointer bg-green-500 text-white px-4 py-2 rounded"
+      >
+        Guardar
+      </button>
     </div>
   </div>
+</div>
 );
+
 }
