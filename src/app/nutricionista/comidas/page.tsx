@@ -23,6 +23,7 @@ export default function ComidasNutricionistaPage() {
   });
   const [listaComidas, setListaComidas] = useState<any[]>([]);
   const [comidaSeleccionada, setComidaSeleccionada] = useState<any | null>(null);
+  const [filtro, setFiltro] = useState(""); // 👈 NUEVO estado para el filtro
 
   const fetchComidas = async () => {
     try {
@@ -98,6 +99,11 @@ export default function ComidasNutricionistaPage() {
     setComida({ nombre: "", hidratos: "", proteinas: "", grasas: "", kcal: "" });
   };
 
+  // Filtramos las comidas por nombre
+  const comidasFiltradas = listaComidas.filter((comida) =>
+    comida.nombre.toLowerCase().includes(filtro.toLowerCase())
+  );
+
   return (
     <div className="w-full min-h-screen py-10">
       <div className="flex items-center justify-between mb-6">
@@ -110,6 +116,18 @@ export default function ComidasNutricionistaPage() {
         </button>
       </div>
 
+      {/*  Cuadro de búsqueda */}
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Buscar comida por nombre..."
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+          className="w-full sm:w-96 p-2 border border-gray-300 rounded"
+        />
+      </div>
+
+      {/*  Formulario para crear comida */}
       {mostrarFormulario && (
         <form
           onSubmit={handleSubmit}
@@ -146,8 +164,9 @@ export default function ComidasNutricionistaPage() {
         </form>
       )}
 
+      {/* 🟩 Lista de comidas filtradas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-        {listaComidas.map((item, index) => (
+        {comidasFiltradas.map((item, index) => (
           <div
             key={index}
             onClick={() => setComidaSeleccionada(item)}
