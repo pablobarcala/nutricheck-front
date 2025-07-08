@@ -2,6 +2,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import GlobalLayout from "@/components/GlobalLayout";
 import { Providers } from "./providers";
+import AuthGuard from "@/components/AuthGuard";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -14,9 +15,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${montserrat.className} antialiased`}>
-        <Providers>
-          <GlobalLayout>{children}</GlobalLayout>
-        </Providers>
+        <AuthGuard>
+          <Providers>
+            <GlobalLayout>{children}</GlobalLayout>
+          </Providers>
+        </AuthGuard>
       </body>
     </html>
   );
