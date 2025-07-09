@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { environment } from "@/environment/environment";
 import ModalEditarComida from "@/components/Modales/ModalEditarComida";
+import ModalImportarComidas from "@/components/Modales/ModalImportarComidas";
 
 interface Comida {
   nombre: string;
@@ -24,6 +25,7 @@ export default function ComidasNutricionistaPage() {
   const [listaComidas, setListaComidas] = useState<any[]>([]);
   const [comidaSeleccionada, setComidaSeleccionada] = useState<any | null>(null);
   const [filtro, setFiltro] = useState(""); // 👈 NUEVO estado para el filtro
+  const [mostrarModalImportar, setMostrarModalImportar] = useState(false);
 
   const fetchComidas = async () => {
     try {
@@ -114,6 +116,12 @@ export default function ComidasNutricionistaPage() {
         >
           {mostrarFormulario ? "Cancelar" : "Cargar comida"}
         </button>
+         <button
+    className="cursor-pointer bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded transition"
+    onClick={() => setMostrarModalImportar(true)}
+  >
+    Cargar desde Excel
+  </button>
       </div>
 
       {/*  Cuadro de búsqueda */}
@@ -188,6 +196,13 @@ export default function ComidasNutricionistaPage() {
           }}
         />
       )}
+      {mostrarModalImportar && (
+  <ModalImportarComidas
+    onClose={() => setMostrarModalImportar(false)}
+    onImportSuccess={fetchComidas}
+  />
+)}
+
     </div>
   );
 }
