@@ -7,23 +7,6 @@ import {
   getToken
 } from "../src/services/AuthService.js";
 
-// Simulación básica de localStorage para Node.js
-global.localStorage = {
-  store: {},
-  getItem(key) {
-    return this.store[key] || null;
-  },
-  setItem(key, value) {
-    this.store[key] = value.toString();
-  },
-  removeItem(key) {
-    delete this.store[key];
-  },
-  clear() {
-    this.store = {};
-  }
-};
-
 describe("AuthService", () => {
   const apiUrl = "https://localhost:5070";
   const fakeToken = "token-fake";

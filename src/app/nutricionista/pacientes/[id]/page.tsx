@@ -101,19 +101,25 @@ export default function PacienteDetallePage() {
     }
   };
 
-  const handleVincularComida = async (comidaId: string) => {
-    try {
+  const handleVincularComidas = async (comidasIds: string[]) => {
+  try {
+    for (const comidaId of comidasIds) {
       const res = await fetch(`${environment.API}/api/Pacientes/agregar-comida/${id}/${comidaId}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-      if (!res.ok) throw new Error();
-      fetchComidasPaciente();
-      setMostrarModal(false);
-    } catch {
-      alert("Error al vincular la comida");
+      if (!res.ok) throw new Error("Error al vincular comida");
     }
-  };
+
+    await fetchComidasPaciente();
+    setMostrarModal(false);
+  } catch {
+    alert("Error al vincular las comidas");
+  }
+};
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -155,6 +161,17 @@ export default function PacienteDetallePage() {
       // fetchComidasRegistradas();
     }
   }, [id]);
+  useEffect(() => {
+  if (mostrarModal) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+  return () => {
+    document.body.style.overflow = "";
+  };
+}, [mostrarModal]);
 
   if (!paciente) return <div className="p-4">Cargando datos del paciente...</div>;
 
@@ -238,7 +255,8 @@ export default function PacienteDetallePage() {
       {mostrarModal && (
         <SeleccionarComidaModal
           onClose={() => setMostrarModal(false)}
-          onVincular={handleVincularComida}
+          onVincular={handleVincularComidas}
+          comidasVinculadas={comidas.map((c) => c.id)}
         />
       )}
     </div>
