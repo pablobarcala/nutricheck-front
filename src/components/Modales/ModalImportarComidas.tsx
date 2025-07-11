@@ -80,46 +80,46 @@ export default function ModalImportarComidas({ onClose, onImportSuccess }: Props
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-2xl shadow-lg relative">
-        <h2 className="text-xl font-bold mb-4">📥 Importar comidas desde Excel</h2>
+        <h2 className="text-neutral-900 text-xl font-bold mb-4">📥 Importar comidas desde Excel</h2>
 
         <input
           type="file"
           accept=".xlsx,.xls,.csv"
           onChange={handleArchivo}
-          className="mb-4"
+          className="mb-4 text-neutral-900"
         />
 
         {preview.length > 0 && (
-  <div className="overflow-auto max-h-64 border border-gray-300 rounded shadow">
-    <table className="w-full text-sm text-left border-collapse">
-      <thead className="bg-green-100 text-green-900 uppercase text-xs">
-        <tr>
-          <th className="px-4 py-3 border-b border-green-300">Nombre</th>
-          <th className="px-4 py-3 border-b border-green-300">Hidratos</th>
-          <th className="px-4 py-3 border-b border-green-300">Proteínas</th>
-          <th className="px-4 py-3 border-b border-green-300">Grasas</th>
-          <th className="px-4 py-3 border-b border-green-300">Kcal</th>
-        </tr>
-      </thead>
-      <tbody>
-        {preview.map((comida, i) => (
-          <tr
-            key={i}
-            className={`${
-              i % 2 === 0 ? "bg-white" : "bg-gray-50"
-            } hover:bg-green-50 transition text-black`}
-          >
-            <td className="px-4 py-2 border-b border-gray-200">{comida.nombre}</td>
-            <td className="px-4 py-2 border-b border-gray-200">{comida.hidratos}</td>
-            <td className="px-4 py-2 border-b border-gray-200">{comida.proteinas}</td>
-            <td className="px-4 py-2 border-b border-gray-200">{comida.grasas}</td>
-            <td className="px-4 py-2 border-b border-gray-200">{comida.kcal}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-)}
+          <div className="overflow-auto max-h-64 border border-gray-300 rounded shadow">
+            <table className="w-full text-sm text-left border-collapse">
+              <thead className="bg-green-100 text-green-900 uppercase text-xs">
+                <tr>
+                  <th className="px-4 py-3 border-b border-green-300">Nombre</th>
+                  <th className="px-4 py-3 border-b border-green-300">Hidratos</th>
+                  <th className="px-4 py-3 border-b border-green-300">Proteínas</th>
+                  <th className="px-4 py-3 border-b border-green-300">Grasas</th>
+                  <th className="px-4 py-3 border-b border-green-300">Kcal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {preview.map((comida, i) => (
+                  <tr
+                    key={i}
+                    className={`${
+                      i % 2 === 0 ? "bg-white" : "bg-gray-50"
+                    } hover:bg-green-50 transition text-black`}
+                  >
+                    <td className="px-4 py-2 border-b border-gray-200">{comida.nombre}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{comida.hidratos}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{comida.proteinas}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{comida.grasas}</td>
+                    <td className="px-4 py-2 border-b border-gray-200">{comida.kcal}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <div className="flex justify-end gap-2 mt-6">
           <button onClick={onClose} className="px-4 py-2 bg-gray-400 text-white rounded">
