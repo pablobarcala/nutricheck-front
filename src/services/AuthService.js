@@ -1,5 +1,3 @@
-// src/services/AuthService.js
-
 export const loginAPI = async (email, password, apiUrl) => {
   const response = await fetch(`${apiUrl}/api/login`, {
     method: "POST",
@@ -40,3 +38,4 @@ export const logout = () => {
 export const getToken = () => {
   return localStorage.getItem("token");
 };
+

@@ -11,6 +11,7 @@ describe("AuthService", () => {
   const apiUrl = "https://localhost:5070";
   const fakeToken = "token-fake";
 
+
   beforeEach(() => {
     sinon.stub(global, "fetch");
     localStorage.clear();
