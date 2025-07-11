@@ -15,7 +15,7 @@ interface JwtPayload {
 interface Comida {
   id: string;
   nombre: string;
-  caloriasTotales: number;
+  kcal: number;
   descripcion?: string;
   fecha?: string;
 }
@@ -51,6 +51,7 @@ export default function ComidasPacientePage() {
       if (!res.ok) throw new Error("Error al obtener comidas");
       const data = await res.json();
       setComidas(data);
+      console.log(data);
     } catch (err) {
       console.error(err);
       alert("No se pudo cargar las comidas");
@@ -78,7 +79,7 @@ if (isNaN(calorias) || calorias <= 0) {
         },
         body: JSON.stringify({
              nombre: form.nombre,
-             caloriasTotales: calorias,
+             kcal: calorias,
              fecha: form.fecha,
           }),
       });
@@ -86,7 +87,7 @@ if (isNaN(calorias) || calorias <= 0) {
       if (!res.ok) throw new Error("Error al registrar comida");
 
       setForm({ nombre: "", caloriasTotales: "", fecha: "" });
-      if (pacienteId) fetchComidas(pacienteId);
+      if (pacienteId) fetchComidas();
       alert("Comida registrada con éxito");
     } catch (err) {
       console.error(err);
@@ -111,7 +112,7 @@ if (isNaN(calorias) || calorias <= 0) {
         <button
           key={comida.id}
           onClick={() => setComidaSeleccionada(comida)}
-          className="w-full text-left p-2 border rounded-md hover:bg-white hover:text-black transition"
+          className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 p-4 rounded shadow cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-100/5 transition w-full mb-2 text-green-700"
         >
           {comida.nombre} - {comida.kcal} kcal
         </button>
