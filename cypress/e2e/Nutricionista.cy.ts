@@ -16,6 +16,8 @@ describe('Flujo completo', () => {
     cy.get('#email').type("pablo2@correo.com");
     cy.get('#password').type("12345678");
     cy.get('.from-\\[\\#4AFF50\\]').click();
+   
+    
 
 });
 });
