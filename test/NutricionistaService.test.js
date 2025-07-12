@@ -33,7 +33,7 @@ describe('NutricionistaService', () => {
       expect(calledUrl).to.equal(`${apiUrl}/api/Pacientes/buscar?nombre=${nombre}`);
     });
 
-    it('debe lanzar error si la búsqueda falla', async () => {
+    it('debe mostrar ese usuario no fue encontrado', async () => {
       fetchStub.resolves({ ok: false, status: 404 });
 
       try {
