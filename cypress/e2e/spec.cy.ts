@@ -17,10 +17,16 @@ describe('Flujo completo', () => {
     
     //aqui se rellena el formulario para luego crear la cuenta del paciente.
 
-    cy.get('#nombre').type("Juan");
-    cy.get('#email').type("juanp@correo.com");
+    cy.get('#nombre').type("vegeta");
+    cy.get('#email').type("vegeta@correo.com");
     cy.get('#password').type("12345678");
    cy.get('#confirmPassword').type("12345678");
    cy.get('.space-y-6 > .bg-gradient-to-r').click();
+   cy.get(':nth-child(1) > .p-2').type("90");
+   cy.get(':nth-child(2) > .p-2').type("180");
+   cy.get(':nth-child(3) > .p-2').type('2000-07-13');
+   cy.get(':nth-child(4) > .p-2').select('masculino');
+   cy.get(':nth-child(5) > .p-2').select('Sedentario - sin ejercicio');
+   cy.get('.mt-4').click();
   });
 });
