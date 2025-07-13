@@ -29,6 +29,7 @@ export default function Inicio() {
       if (!res.ok) throw new Error("Error al cargar comidas");
 
       const data = await res.json();
+      console.log(data);
 
       // setComidasPaciente(data);
 
@@ -96,10 +97,14 @@ export default function Inicio() {
 
       alert("Comida registrada con éxito");
 
-      setComidasDelDia((prev) => 
-        updateComidasDelDia(prev, selectedDay, result.data)
-      );
-
+      setComidasDelDia((prev) => {
+  const nuevasComidas = [...(prev[selectedDay] || []), result.data];
+  return {
+    ...prev,
+    [selectedDay]: nuevasComidas,
+  };
+});
+      calcularResumenDiario();
       setModalComidasPaciente(false);
       setComidaSeleccionada(null);
       setHorarioSeleccionado("");
@@ -129,6 +134,10 @@ export default function Inicio() {
 
     fetchCaloriasObjetivo();
   }, []);
+  useEffect(() => {
+  console.log("comidasDelDia cambió:", comidasDelDia[selectedDay]);
+  calcularResumenDiario();
+}, [comidasDelDia, selectedDay]);
 
   return (
     <div className="py-10">
