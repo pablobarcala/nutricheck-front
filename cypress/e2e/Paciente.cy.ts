@@ -17,8 +17,8 @@ describe('Flujo completo', () => {
     
     //aqui se rellena el formulario para luego crear la cuenta del paciente.
 
-    cy.get('#nombre').type("jose");
-    cy.get('#email').type("jose10@correo.com");
+    cy.get('#nombre').type("Manuel");
+    cy.get('#email').type("Manuel@correo.com");
     cy.get('#password').type("12345678");
    cy.get('#confirmPassword').type("12345678");
    cy.get('.space-y-6 > .bg-gradient-to-r').click();

@@ -18,10 +18,10 @@ describe('Flujo completo', () => {
     cy.get('.from-\\[\\#4AFF50\\]').click();
     cy.get('a[href="/nutricionista/comidas"]').click();
     cy.get('button.bg-green-800').click();
-    // cy.get(':nth-child(1) > .bg-neutral-200').type("Pollo al horno con arroz");
-    // cy.get(':nth-child(2) > .bg-neutral-200').type("35");
-    // cy.get(':nth-child(3) > .bg-neutral-200').type("25");
-    // cy.get(':nth-child(4) > .bg-neutral-200').type("10");    
+    cy.get(':nth-child(1) > .bg-neutral-200').type("Pollo al horno con arroz");
+    cy.get(':nth-child(2) > .bg-neutral-200').type("35");
+    cy.get(':nth-child(3) > .bg-neutral-200').type("25");
+    cy.get(':nth-child(4) > .bg-neutral-200').type("10");    
     cy.get('.mt-6').click();
     cy.get(':nth-child(10) > .text-lg').click();
     cy.get('.bg-gray-400').click();
