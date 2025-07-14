@@ -1,0 +1,285 @@
+{
+	"info": {
+		"_postman_id": "ae1d85ba-9622-4c19-8bbd-727ed454ca1e",
+		"name": "Nutri-Check",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45107124",
+		"_collection_link": "https://alejandropiccolo.postman.co/workspace/Alejandro-Piccolo's-Workspace~ccbe36d2-bf17-419a-85e5-a9d4cca614df/collection/45107124-ae1d85ba-9622-4c19-8bbd-727ed454ca1e?action=share&source=collection_link&creator=45107124"
+	},
+	"item": [
+		{
+			"name": "Nutricionistas",
+			"item": [
+				{
+					"name": "vinculacion-paciente-nutricionista",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Tiempo de respuesta razonable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Validar resultado de vinculación\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"\r",
+									"    if (responseJson === false) {\r",
+									"        console.log(\"El paciente ya está vinculado al nutricionista\");\r",
+									"        pm.expect(responseJson).to.eql(false);\r",
+									"    } else {\r",
+									"        pm.expect(responseJson).to.not.eql(false);\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODFhMmIzMGE5MTNmOTA0YjZiNWYzNjUiLCJlbWFpbCI6InBhYmxvMkBjb3JyZW8uY29tIiwicm9sZSI6Im51dHJpY2lvbmlzdGEiLCJleHAiOjE3NTExNTI4NzZ9.7INmta8Sq_upi1ifT0W1QPSdtewNGu6AVo1MxzNprbY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5070/api/Nutricionistas/agregar-paciente?pacienteId=68570b33b33138dba421a30c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5070",
+							"path": [
+								"api",
+								"Nutricionistas",
+								"agregar-paciente"
+							],
+							"query": [
+								{
+									"key": "pacienteId",
+									"value": "68570b33b33138dba421a30c"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar-paciente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Tiempo de respuesta razonable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+									"});\r",
+									"pm.test(\"Devuelve array vacío si el nombre no existe\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    if (Array.isArray(jsonData) && jsonData.length === 0) {\r",
+									"        console.log(\"✅ No se encontró ningún paciente con ese nombre (respuesta vacía).\");\r",
+									"        pm.expect(jsonData.length).to.equal(0);\r",
+									"    } else {\r",
+									"        pm.expect(jsonData.length).to.be.above(0);\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwidW5pcXVlX25hbWUiOiJhbGVqYW5kcm8iLCJhcGVsbGlkbyI6InBpY2NvbG8iLCJlbWFpbCI6ImFwMUBnbWFpbC5jb20iLCJyb2xlIjoicHJvZmVzaW9uYWwiLCJFc3BlY2lhbGlkYWQiOiJUcmF1bWF0b2xvZ28iLCJuYmYiOjE3NTAyNTU3MzEsImV4cCI6MTc1MDI1OTMzMSwiaWF0IjoxNzUwMjU1NzMxfQ.JiAGQeb_gA3deXsRDueVDsWEsjZXSrNsK3Usdwc83KI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5070/api/Pacientes/buscar?nombre=Patricio",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5070",
+							"path": [
+								"api",
+								"Pacientes",
+								"buscar"
+							],
+							"query": [
+								{
+									"key": "nombre",
+									"value": "Patricio"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Respuesta OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Tiempo de respuesta razonable\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODFhMmIzMGE5MTNmOTA0YjZiNWYzNjUiLCJlbWFpbCI6InBhYmxvMkBjb3JyZW8uY29tIiwicm9sZSI6Im51dHJpY2lvbmlzdGEiLCJleHAiOjE3NTExNTI4NzZ9.7INmta8Sq_upi1ifT0W1QPSdtewNGu6AVo1MxzNprbY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"pablo2@correo.com\",\r\n    \"password\":\"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5070/api/Auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5070",
+							"path": [
+								"api",
+								"Auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "prueba-autorizacion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Debe responder con 401 Unauthorized si no hay token\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5070/api/Nutricionistas/agregar-paciente?pacienteId=999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5070",
+							"path": [
+								"api",
+								"Nutricionistas",
+								"agregar-paciente"
+							],
+							"query": [
+								{
+									"key": "pacienteId",
+									"value": "999"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
