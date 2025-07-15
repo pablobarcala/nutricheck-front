@@ -20,7 +20,7 @@ import {
 } from "recharts";
 
 // Tipos TypeScript para los datos
-interface CumplimientoDiarioDto {
+export interface CumplimientoDiarioDto {
   fecha: string;
   porcentajeCumplido: number;
 }
@@ -35,7 +35,7 @@ interface RankingPacienteDto {
   diasConRegistro: number;
 }
 
-interface ComidaPopularDto {
+export interface ComidaPopularDto {
   nombre: string;
   cantidad: number;
 }
@@ -101,7 +101,10 @@ const EstadisticasDashboard = () => {
 
   // Formatear fecha para el gráfico
   const formatearFecha = (fecha: string) => {
-    const date = new Date(fecha);
+    // Crear como fecha sin zona horaria (manual split)
+    const [year, month, day] = fecha.split("T")[0].split("-");
+    const date = new Date(Number(year), Number(month) - 1, Number(day)); // sin horario
+
     return date.toLocaleDateString("es-AR", {
       month: "short",
       day: "numeric",
@@ -112,7 +115,7 @@ const EstadisticasDashboard = () => {
   const datosCumplimiento =
     estadisticas?.cumplimientoCaloricoPorDia.map((item) => ({
       fecha: formatearFecha(item.fecha),
-      cumplimiento: item.porcentajeCumplido,
+      cumplimiento: Math.round(item.porcentajeCumplido),
     })) || [];
 
   // Preparar datos para el gráfico de barras

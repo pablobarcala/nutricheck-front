@@ -3,6 +3,7 @@
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { environment } from "@/environment/environment";
 
 interface EncuestaData {
   peso?: number;
@@ -113,7 +114,7 @@ export default function EncuestaPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("https://localhost:7147/api/Pacientes/guardar-datos", {
+      const res = await fetch(environment.API+"/api/Pacientes/guardar-datos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

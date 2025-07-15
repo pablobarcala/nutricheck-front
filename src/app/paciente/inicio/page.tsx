@@ -9,43 +9,62 @@ import { registrarComidaAPI, updateComidasDelDia, validateComidaData } from "@/s
 const horarios = ["Desayuno", "Almuerzo", "Merienda", "Cena"];
 
 export default function Inicio() {
-    const [modalComidasPaciente, setModalComidasPaciente] = useState(false);
-    const [comidasPaciente, setComidasPaciente] = useState<any[]>([]);
-    const [comidaSeleccionada, setComidaSeleccionada] = useState<any | null>(null);
-    const [horarioSeleccionado, setHorarioSeleccionado] = useState("");
-    const [selectedDay, setSelectedDay] = useState<string>(format(new Date, "yyyy-MM-dd"));
-    const [comidasDelDia, setComidasDelDia] = useState<{ [key: string]: any[] }>({});
-    const [caloriasObjetivo, setCaloriasObjetivo] = useState<number>(2000);
+  const [modalComidasPaciente, setModalComidasPaciente] = useState(false);
+  const [comidasPaciente, setComidasPaciente] = useState<any[]>([]);
+  const [comidaSeleccionada, setComidaSeleccionada] = useState<any | null>(null);
+  const [horarioSeleccionado, setHorarioSeleccionado] = useState("");
+  const [selectedDay, setSelectedDay] = useState<string>(format(new Date, "yyyy-MM-dd"));
+  const [comidasDelDia, setComidasDelDia] = useState<{ [key: string]: any[] }>({});
+  const [caloriasObjetivo, setCaloriasObjetivo] = useState<number>(2000);
+  const [porcentaje, setPorcentaje] = useState<number>(0)
+  const [totalKcalDelDia, setTotalKcalDelDia] = useState<number>(0)
+
+  const fetchComidas = async () => {
+    try {
+      const res = await fetch(`${environment.API}/api/Pacientes/comidas-registradas`, {
+          headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+      });
+      if (!res.ok) throw new Error("Error al cargar comidas");
+
+      const data = await res.json();
+      console.log(data);
+
+      // setComidasPaciente(data);
+
+      // Filtra comidas para el día seleccionado
+      const filtradas = data.filter((c: any) => c.fecha === selectedDay);
+
+      setComidasDelDia((prev) => ({
+          ...prev,
+          [selectedDay]: filtradas
+      }));
+
+    } catch (error) {
+      alert("No se pudieron cargar las comidas del paciente");
+    }
+  };
+
+  const calcularResumenDiario = () => {
+    const comidasDia = comidasDelDia[selectedDay] || []
+
+    const totalKcal = comidasDia.reduce((acc, comida) => acc + (comida.kcal || 0), 0)
+
+    setTotalKcalDelDia(totalKcal)
+
+    if (caloriasObjetivo > 0) {
+      const porcentajeCalculado = Math.min((totalKcal / caloriasObjetivo) * 100, 100)
+      setPorcentaje(porcentajeCalculado)
+    } else {
+      setPorcentaje(0)
+    }
+  }
 
   useEffect(() => {
-    const fetchComidas = async () => {
-        try {
-        const res = await fetch(`${environment.API}/api/Pacientes/comidas-registradas`, {
-            headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-        });
-        if (!res.ok) throw new Error("Error al cargar comidas");
-
-        const data = await res.json();
-
-        // setComidasPaciente(data);
-
-        // Filtra comidas para el día seleccionado
-        const filtradas = data.filter((c: any) => c.fecha === selectedDay);
-
-        setComidasDelDia((prev) => ({
-            ...prev,
-            [selectedDay]: filtradas
-        }));
-
-        } catch (error) {
-        alert("No se pudieron cargar las comidas del paciente");
-        }
-    };
-
     fetchComidas();
-    }, [selectedDay]);
+    calcularResumenDiario()
+  }, [selectedDay]);
 
   const fetchComidasPaciente = async () => {
     try {
@@ -78,10 +97,14 @@ export default function Inicio() {
 
       alert("Comida registrada con éxito");
 
-      setComidasDelDia((prev) => 
-        updateComidasDelDia(prev, selectedDay, result.data)
-      );
-
+      setComidasDelDia((prev) => {
+  const nuevasComidas = [...(prev[selectedDay] || []), result.data];
+  return {
+    ...prev,
+    [selectedDay]: nuevasComidas,
+  };
+});
+      calcularResumenDiario();
       setModalComidasPaciente(false);
       setComidaSeleccionada(null);
       setHorarioSeleccionado("");
@@ -91,33 +114,30 @@ export default function Inicio() {
   };
 
   useEffect(() => {
-  const fetchCaloriasObjetivo = async () => {
-    try {
-      const res = await fetch(`${environment.API}/api/Pacientes/mis-calorias`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+    const fetchCaloriasObjetivo = async () => {
+      try {
+        const res = await fetch(`${environment.API}/api/Pacientes/mis-calorias`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-      if (!res.ok) throw new Error("Error al obtener objetivo calórico");
+        if (!res.ok) throw new Error("Error al obtener objetivo calórico");
 
-      const data = await res.json();
-      setCaloriasObjetivo(data); // suponiendo que `data` es un número
-    } catch (error) {
-      console.error("Error al obtener calorías objetivo:", error);
-    }
-  };
+        const data = await res.json();
 
-  fetchCaloriasObjetivo();
-}, []);
-const totalKcalDelDia = (comidasDelDia[selectedDay] || []).reduce(
-  (acc, comida) => acc + (comida.kcal || 0),
-  0
-);
+        setCaloriasObjetivo(data); // suponiendo que `data` es un número
+      } catch (error) {
+        console.error("Error al obtener calorías objetivo:", error);
+      }
+    };
 
-const porcentaje = caloriasObjetivo > 0
-  ? Math.min((totalKcalDelDia / caloriasObjetivo) * 100, 100)
-  : 0;
+    fetchCaloriasObjetivo();
+  }, []);
+  useEffect(() => {
+  console.log("comidasDelDia cambió:", comidasDelDia[selectedDay]);
+  calcularResumenDiario();
+}, [comidasDelDia, selectedDay]);
 
   return (
     <div className="py-10">
