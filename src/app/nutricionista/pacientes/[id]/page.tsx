@@ -64,6 +64,11 @@ export default function PacienteDetallePage() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [comidasRegistradas, setComidasRegistradas] = useState([]);
+  const [planSemanal, setPlanSemanal] = useState<
+  { dia: string; comidas: Comida[] }[]
+>([]);
+const [diaSeleccionado, setDiaSeleccionado] = useState<string | null>(null);
+
   const [form, setForm] = useState({
     calorias: 0,
     grasas: 0,
@@ -104,7 +109,15 @@ export default function PacienteDetallePage() {
     const ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
   };
-
+const fetchPlanSemanal = async () => {
+  try {
+    const res = await fetch(`${environment.API}/api/Pacientes/plan-semanal/${id}`);
+    const data = await res.json();
+    setPlanSemanal(data);
+  } catch {
+    alert("Error al obtener el plan semanal");
+  }
+};
   const fetchComidasRegistradas = async () => {
     try {
       const res = await fetch(`${environment.API}/api/Pacientes/${id}/comidas`);
@@ -158,23 +171,26 @@ export default function PacienteDetallePage() {
     }
   };
 
-  const handleVincularComidas = async (comidasIds: string[]) => {
-  try {
-    for (const comidaId of comidasIds) {
-      const res = await fetch(`${environment.API}/api/Pacientes/agregar-comida/${id}/${comidaId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      if (!res.ok) throw new Error("Error al vincular comida");
-    }
+ const handleVincularComidas = async (comidasIds: string[]) => {
+  if (!diaSeleccionado) return;
 
-    await fetchComidasPaciente();
+  try {
+    const res = await fetch(`${environment.API}/api/Pacientes/plan-semanal/${id}/${diaSeleccionado}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(comidasIds), // array de IDs
+    });
+
+    if (!res.ok) throw new Error("Error al vincular comida al día");
+
+    await fetchPlanSemanal(); // refresca
     setMostrarModal(false);
+    setDiaSeleccionado(null);
   } catch {
-    alert("Error al vincular las comidas");
+    alert("Error al vincular comidas al día");
   }
 };
 
@@ -216,6 +232,7 @@ export default function PacienteDetallePage() {
       fetchPaciente();
       fetchComidasPaciente();
       fetchProgreso();
+      fetchPlanSemanal();
       // fetchComidasRegistradas();
     }
   }, [id]);
@@ -307,6 +324,32 @@ export default function PacienteDetallePage() {
               )}
             </ul>
           </div>
+          <div className="mb-12">
+           <h2 className="text-xl font-semibold mb-4">📅 Plan Semanal</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    {planSemanal.map((diaData) => (
+      <div key={diaData.dia} className="border rounded p-4 shadow bg-neutral-100">
+        <h3 className="text-lg font-bold mb-2">{diaData.dia}</h3>
+        <ul className="mb-2 space-y-1">
+          {diaData.comidas.length > 0 ? diaData.comidas.map((comida) => (
+            <li key={comida.id} className="text-sm">
+              🍽️ {comida.nombre} - {comida.kcal} kcal
+            </li>
+          )) : <p className="text-gray-500 text-sm">Sin comidas</p>}
+        </ul>
+        <button
+          onClick={() => {
+            setDiaSeleccionado(diaData.dia);
+            setMostrarModal(true);
+          }}
+          className="bg-green-500 text-white px-3 py-1 rounded"
+        >
+          Agregar comida
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
           {/* <div className="mb-6 mt-10">
             <h2 className="text-xl font-semibold mb-3">📋 Comidas registradas por el paciente</h2>
               <ul className="space-y-2">
