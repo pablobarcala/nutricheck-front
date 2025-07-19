@@ -4,12 +4,14 @@ import HorizontalDatePicker from "./HorizontalDatePicker";
 import CardPaciente from "./CardPaciente";
 import { format } from "date-fns";
 import { environment } from "@/environment/environment";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 export default function HomeNutricionista() {
     const [saludo, setSaludo] = useState("");
     const [selectedDay, setSelectedDay] = useState<string>(format(new Date, "yyyy-MM-dd"))
     const [pacientesConComidas, setPacientesConComidas] = useState<any[]>([])
     const [pacientesFiltrados, setPacientesFiltrados] = useState<any[]>([])
+    const [nombre, setNombre] = useState("")
 
     useEffect(() => {
         const fetchComidas = async () => {
@@ -26,14 +28,6 @@ export default function HomeNutricionista() {
                 // console.log(data);
         
                 setPacientesConComidas(data);
-        
-                // Filtra comidas para el día seleccionado
-                // const filtradas = data.filter((c: any) => c.fecha === selectedDay);
-        
-                // setComidasDelDia((prev) => ({
-                //     ...prev,
-                //     [selectedDay]: filtradas
-                // }));
     
             } catch (error) {
                 alert("No se pudieron cargar las comidas del paciente");
@@ -62,6 +56,10 @@ export default function HomeNutricionista() {
     }, [selectedDay, pacientesConComidas])
 
     useEffect(() => {
+        const token = localStorage.getItem("token") || "";
+        const decodedToken = jwtDecode<JwtPayload>(token);
+        setNombre(decodedToken.nombre || "")
+
         const hora = new Date().getHours();
         let mensaje = "";
 
@@ -86,7 +84,7 @@ export default function HomeNutricionista() {
                 w-full
             "
         >
-            <p className="font-bold text-3xl">{saludo}, Juan</p>
+            <p className="font-bold text-3xl">{saludo}, {nombre}</p>
             <HorizontalDatePicker 
                 onDateChange={(date) => setSelectedDay(format(date, "yyyy-MM-dd"))}
             />

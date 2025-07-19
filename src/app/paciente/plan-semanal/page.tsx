@@ -5,8 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import { environment } from "@/environment/environment";
 
 interface Comida {
-  id: string;
-  nombre: string;
+  // id: string;
+  name: string;
   kcal: number;
 }
 
@@ -22,18 +22,17 @@ interface JwtPayload {
 
 export default function PlanSemanalPaciente() {
   const [planSemanal, setPlanSemanal] = useState<DiaPlan[]>([]);
-  const [pacienteId, setPacienteId] = useState<string | null>(null);
+  // const [pacienteId, setPacienteId] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const decoded: JwtPayload = jwtDecode(token);
-    setPacienteId(decoded.id);
-
     const fetchPlan = async () => {
       try {
-        const res = await fetch(`${environment.API}/api/Pacientes/plan-semanal/${decoded.id}`);
+        const res = await fetch(`${environment.API}/api/Pacientes/plan-semanal`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
         const data = await res.json();
         setPlanSemanal(data);
       } catch (error) {
@@ -50,12 +49,12 @@ export default function PlanSemanalPaciente() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {planSemanal.map((dia) => (
-          <div key={dia.dia} className="border rounded p-4 bg-neutral-100 shadow">
+          <div key={dia.dia} className="border border-neutral-200 dark:border-neutral-200/10 rounded-md p-3 shadow bg-neutral-100 dark:bg-neutral-100/10">
             <h3 className="text-lg font-semibold mb-2">{dia.dia}</h3>
             {dia.comidas.length > 0 ? (
               <ul className="space-y-1 text-sm">
                 {dia.comidas.map((comida) => (
-                  <li key={comida.id}>🍽️ {comida.nombre} — {comida.kcal} kcal</li>
+                  <li key={comida.name}>🍽️ {comida.name} — {comida.kcal} kcal</li>
                 ))}
               </ul>
             ) : (
