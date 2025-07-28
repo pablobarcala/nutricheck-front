@@ -1,6 +1,6 @@
 describe('Flujo de Paciente Logeado', () => {
   it('Realiza el flujo completo correctamente', () => {
-    cy.visit('http://localhost:3000/');
+    cy.visit('https://www.nutricheck.me/');
     cy.get('.cursor-pointer').should('exist').click();
     cy.get('#email').type("pablo3@correo.com");
     cy.get('#password').type("12345678");

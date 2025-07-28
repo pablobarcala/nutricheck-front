@@ -3,14 +3,15 @@ export const registrarComidaAPI = async (comidaData, token, apiUrl) => {
         fecha: comidaData.selectedDay,
         horario: comidaData.horarioSeleccionado,
         comidaId: comidaData.comidaSeleccionada.id,
-        nombre: comidaData.comidaSeleccionada.nombre
+        nombre: comidaData.comidaSeleccionada.nombre,
+        kcal: comidaData.comidaSeleccionada.kcal
     }
 
     const response = await fetch(`${apiUrl}/api/Pacientes/registrar-comida`, {
         method: "POST",
         headers: { 
-        "Content-Type": "application/json", 
-        Authorization: `Bearer ${token}` 
+            "Content-Type": "application/json", 
+            Authorization: `Bearer ${token}` 
         },
         body: JSON.stringify(body),
     });

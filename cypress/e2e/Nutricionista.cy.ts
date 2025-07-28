@@ -1,6 +1,6 @@
-describe('Flujo completo', () => {
-  it('Realiza el flujo completo correctamente', () => {
-    cy.visit('http://localhost:3000/');
+describe('template spec', () => {
+ it('Realiza el flujo completo correctamente', () => {
+    cy.visit('https://www.nutricheck.me/');
     //verifica el logo
     // cy.get('.ml-3').should('be.visible');
     //   //verifica el boton caracteristicas
@@ -35,12 +35,5 @@ describe('Flujo completo', () => {
     cy.get('.flex > .bg-green-500').click();
     cy.get('a[href="/nutricionista/panel-control"]').click();
     cy.get('.space-x-4 > .cursor-pointer').click();
-    
-    
-
-  });
-
-
-
-
-});
+  })
+})

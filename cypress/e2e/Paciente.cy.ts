@@ -1,6 +1,6 @@
 describe('Flujo completo', () => {
   it('Realiza el flujo completo correctamente', () => {
-    cy.visit('http://localhost:3000/');
+    cy.visit('https://www.nutricheck.me/');
     //verifica el logo
     cy.get('.ml-3').should('be.visible');
       //verifica el boton caracteristicas

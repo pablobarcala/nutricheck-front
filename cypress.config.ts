@@ -9,6 +9,8 @@ export default defineConfig({
     json: true,
   },
   e2e: {
+    baseUrl:"https://nutricheck.me",
+    specPattern:"cypress/e2e/**/*.cy.{js,jsx,ts,tsx}",
     setupNodeEvents(on, config) {
       // Puedes agregar aquí event listeners si los necesitás después
     },

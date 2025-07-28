@@ -18,6 +18,7 @@ import {
   Bar,
 } from "recharts";
 import { ComidaPopularDto, CumplimientoDiarioDto } from "../../panel-control/page";
+import { Plus } from "lucide-react";
 
 type JwtPayload = {
   id: string;
@@ -64,6 +65,11 @@ export default function PacienteDetallePage() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [comidasRegistradas, setComidasRegistradas] = useState([]);
+  const [planSemanal, setPlanSemanal] = useState<
+  { dia: string; comidas: {name:string, kcal:number}[] }[]
+>([]);
+const [diaSeleccionado, setDiaSeleccionado] = useState<string>("");
+
   const [form, setForm] = useState({
     calorias: 0,
     grasas: 0,
@@ -103,6 +109,16 @@ export default function PacienteDetallePage() {
     const ageDifMs = Date.now() - birthDate.getTime();
     const ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
+  };
+
+  const fetchPlanSemanal = async () => {
+    try {
+      const res = await fetch(`${environment.API}/api/Pacientes/plan-semanal/${id}`);
+      const data = await res.json();
+      setPlanSemanal(data);
+    } catch {
+      alert("Error al obtener el plan semanal");
+    }
   };
 
   const fetchComidasRegistradas = async () => {
@@ -159,24 +175,28 @@ export default function PacienteDetallePage() {
   };
 
   const handleVincularComidas = async (comidasIds: string[]) => {
-  try {
-    for (const comidaId of comidasIds) {
-      const res = await fetch(`${environment.API}/api/Pacientes/agregar-comida/${id}/${comidaId}`, {
+    if (!diaSeleccionado) return;
+
+    try {
+      const res = await fetch(`${environment.API}/api/Pacientes/edit-plan-semanal/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        body: JSON.stringify({dia: diaSeleccionado, comidas: comidasIds}), // array de IDs
       });
-      if (!res.ok) throw new Error("Error al vincular comida");
-    }
 
-    await fetchComidasPaciente();
-    setMostrarModal(false);
-  } catch {
-    alert("Error al vincular las comidas");
-  }
-};
+      if (!res.ok) throw new Error("Error al vincular comida al día");
+
+      await fetchPlanSemanal(); // refresca
+      await fetchComidasPaciente()
+      setMostrarModal(false);
+      setDiaSeleccionado("");
+    } catch {
+      alert("Error al vincular comidas al día");
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -216,6 +236,7 @@ export default function PacienteDetallePage() {
       fetchPaciente();
       fetchComidasPaciente();
       fetchProgreso();
+      fetchPlanSemanal();
       // fetchComidasRegistradas();
     }
   }, [id]);
@@ -228,9 +249,9 @@ export default function PacienteDetallePage() {
   }
 
   return () => {
-    document.body.style.overflow = "";
-  };
-}, [mostrarModal]);
+      document.body.style.overflow = "";
+    };
+  }, [mostrarModal]);
 
   if (!paciente) return <div className="p-4">Cargando datos del paciente...</div>;
 
@@ -280,20 +301,48 @@ export default function PacienteDetallePage() {
           </div>
 
           <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-4">📅 Plan Semanal</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {planSemanal.map((diaData) => (
+                <div key={diaData.dia} className="border border-neutral-200 dark:border-neutral-200/10 rounded-md p-3 shadow bg-neutral-100 dark:bg-neutral-100/10">
+                  <h3 className="text-lg font-bold mb-2">{diaData.dia}</h3>
+                  <ul className="mb-2 space-y-1">
+                    {diaData.comidas.length > 0 ? diaData.comidas.map((comida) => (
+                      <li key={comida.name} className="text-sm">
+                        🍽️ {comida.name} - {comida.kcal} kcal
+                      </li>
+                    )) : <p className="text-gray-400 text-sm">Sin comidas</p>}
+                  </ul>
+                  <button
+                    onClick={() => {
+                      setDiaSeleccionado(diaData.dia);
+                      setMostrarModal(true);
+                    }}
+                    className="bg-green-600 text-white p-2 rounded cursor-pointer hover:bg-green-600/80 transition"
+                  >
+                    <Plus />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6">
             <div className="w-full flex justify-between items-center mb-3">
               <h2 className="text-xl font-semibold w-fit">Comidas asignadas</h2>
-              <button
+              {/* <button
                 onClick={() => setMostrarModal(true)}
                 className="bg-green-500 text-black font-semibold px-4 py-2 rounded hover:bg-green-600"
               >
                 Vincular nueva comida
-              </button>
+              </button> */}
 
               {mostrarModal && (
                 <SeleccionarComidaModal
                   onClose={() => setMostrarModal(false)}
                   onVincular={handleVincularComidas}
                   comidasVinculadas={comidas.map((c) => c.id)}
+                  diaSeleccionado={diaSeleccionado}
                 />
               )}
             </div>
@@ -307,6 +356,7 @@ export default function PacienteDetallePage() {
               )}
             </ul>
           </div>
+          
           {/* <div className="mb-6 mt-10">
             <h2 className="text-xl font-semibold mb-3">📋 Comidas registradas por el paciente</h2>
               <ul className="space-y-2">
@@ -396,16 +446,6 @@ export default function PacienteDetallePage() {
               </span>
             </li>
           ))}
-          {/* <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={progreso?.diasConMasComidas}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="dia" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="cantidad" fill="#10b981" name="Cantidad" />
-            </BarChart>
-          </ResponsiveContainer> */}
         </div>
       </div>
     </>

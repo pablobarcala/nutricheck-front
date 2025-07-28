@@ -73,6 +73,28 @@ const pacienteItems = [
     name: "Comidas",
     ruta: "/paciente/comidas"
   },
+  {
+  icon: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none">
+      <path d="M3 17h2v-6H3v6zm4 0h2V7H7v10zm4 0h2v-4h-2v4zm4 0h2V4h-2v13zm4 0h2v-8h-2v8z" fill="currentColor" />
+    </svg>
+  ),
+  name: "Progreso",
+  ruta: "/paciente/progreso"
+},
+
+{
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+      </svg>
+    ),
+    name: "Plan Semanal",
+    ruta: "/paciente/plan-semanal",
+  }
 ]
 
 export default function GlobalLayout({ children }: { children: React.ReactNode }) {

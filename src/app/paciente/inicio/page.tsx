@@ -5,6 +5,7 @@ import { environment } from "@/environment/environment";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { registrarComidaAPI, updateComidasDelDia, validateComidaData } from "@/services/comidaService";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 
 const horarios = ["Desayuno", "Almuerzo", "Merienda", "Cena"];
 
@@ -18,6 +19,59 @@ export default function Inicio() {
   const [caloriasObjetivo, setCaloriasObjetivo] = useState<number>(2000);
   const [porcentaje, setPorcentaje] = useState<number>(0)
   const [totalKcalDelDia, setTotalKcalDelDia] = useState<number>(0)
+  const [saludo, setSaludo] = useState("")
+  const [nombre, setNombre] = useState("")
+
+  useEffect(() => {
+      const token = localStorage.getItem("token") || "";
+      const decodedToken = jwtDecode<JwtPayload>(token);
+      setNombre(decodedToken.nombre || "")
+
+      const hora = new Date().getHours();
+      let mensaje = "";
+
+      if (hora < 12) {
+          mensaje = "Buen día";
+      } else if (hora < 19) {
+          mensaje = "Buenas tardes";
+      } else {
+          mensaje = "Buenas noches";
+      }
+
+      setSaludo(mensaje);
+  }, []);
+
+  useEffect(() => {
+    fetchComidas();
+    calcularResumenDiario()
+  }, [selectedDay]);
+
+  useEffect(() => {
+    const fetchCaloriasObjetivo = async () => {
+      try {
+        const res = await fetch(`${environment.API}/api/Pacientes/mis-calorias`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Error al obtener objetivo calórico");
+
+        const data = await res.json();
+
+        setCaloriasObjetivo(data);
+      } catch (error) {
+        console.error("Error al obtener calorías objetivo:", error);
+      }
+    };
+
+    fetchCaloriasObjetivo();
+  }, []);
+
+  useEffect(() => {
+    console.log("comidasDelDia cambió:", comidasDelDia[selectedDay]);
+    calcularResumenDiario();
+  }, [comidasDelDia, selectedDay]);
 
   const fetchComidas = async () => {
     try {
@@ -29,9 +83,9 @@ export default function Inicio() {
       if (!res.ok) throw new Error("Error al cargar comidas");
 
       const data = await res.json();
-      console.log(data);
+      console.log("Fetch comidas registradas: " + data);
 
-      // setComidasPaciente(data);
+      setComidasPaciente(data);
 
       // Filtra comidas para el día seleccionado
       const filtradas = data.filter((c: any) => c.fecha === selectedDay);
@@ -49,7 +103,11 @@ export default function Inicio() {
   const calcularResumenDiario = () => {
     const comidasDia = comidasDelDia[selectedDay] || []
 
+    console.log("comidasDia: " + comidasDia)
+
     const totalKcal = comidasDia.reduce((acc, comida) => acc + (comida.kcal || 0), 0)
+
+    console.log("Total calorias: " + totalKcal)
 
     setTotalKcalDelDia(totalKcal)
 
@@ -60,11 +118,6 @@ export default function Inicio() {
       setPorcentaje(0)
     }
   }
-
-  useEffect(() => {
-    fetchComidas();
-    calcularResumenDiario()
-  }, [selectedDay]);
 
   const fetchComidasPaciente = async () => {
     try {
@@ -98,12 +151,12 @@ export default function Inicio() {
       alert("Comida registrada con éxito");
 
       setComidasDelDia((prev) => {
-  const nuevasComidas = [...(prev[selectedDay] || []), result.data];
-  return {
-    ...prev,
-    [selectedDay]: nuevasComidas,
-  };
-});
+        const nuevasComidas = [...(prev[selectedDay] || []), result.data];
+        return {
+          ...prev,
+          [selectedDay]: nuevasComidas,
+        };
+      });
       calcularResumenDiario();
       setModalComidasPaciente(false);
       setComidaSeleccionada(null);
@@ -113,62 +166,37 @@ export default function Inicio() {
     }
   };
 
-  useEffect(() => {
-    const fetchCaloriasObjetivo = async () => {
-      try {
-        const res = await fetch(`${environment.API}/api/Pacientes/mis-calorias`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        if (!res.ok) throw new Error("Error al obtener objetivo calórico");
-
-        const data = await res.json();
-
-        setCaloriasObjetivo(data); // suponiendo que `data` es un número
-      } catch (error) {
-        console.error("Error al obtener calorías objetivo:", error);
-      }
-    };
-
-    fetchCaloriasObjetivo();
-  }, []);
-  useEffect(() => {
-  console.log("comidasDelDia cambió:", comidasDelDia[selectedDay]);
-  calcularResumenDiario();
-}, [comidasDelDia, selectedDay]);
-
   return (
     <div className="py-10">
+      <p className="font-bold text-2xl mb-6">{saludo}, {nombre}</p>
       <HorizontalDatePicker
         onDateChange={(date) => setSelectedDay(format(date, "yyyy-MM-dd"))}
       />
       <div className="mt-8 mb-6">
-  <h2 className="text-xl font-bold mb-2">Tu progreso calórico</h2>
-  <p className="mb-2 text-neutral-700">
-    {totalKcalDelDia} kcal / {caloriasObjetivo} kcal
-  </p>
+      <h2 className="text-xl font-bold mb-2">Tu progreso calórico</h2>
+      <p className="mb-2 text-neutral-700">
+        {totalKcalDelDia} kcal / {caloriasObjetivo} kcal
+      </p>
 
-  <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner">
-    <div
-      className={`h-full text-xs font-medium text-center text-white leading-6 transition-all duration-300 ease-in-out ${
-        totalKcalDelDia >= caloriasObjetivo ? "bg-green-700" : "bg-green-500"
-      }`}
-      style={{ width: `${porcentaje}%` }}
-    >
-      {Math.round(porcentaje)}%
-    </div>
-  </div>
-</div>
-      <div className="mt-6">
-        <h2 className="text-xl font-bold">Comidas del día {selectedDay}</h2>
-        {(comidasDelDia[selectedDay] || []).map((c, i) => (
-          <div key={i} className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 px-2 py-6 my-2 rounded-md">
-            <span className="font-semibold">{c.horario}:</span> {c.nombre}
-          </div>
-        ))}
+      <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner">
+        <div
+          className={`h-full text-xs font-medium text-center text-white leading-6 transition-all duration-300 ease-in-out ${
+            totalKcalDelDia >= caloriasObjetivo ? "bg-green-700" : "bg-green-500"
+          }`}
+          style={{ width: `${porcentaje}%` }}
+        >
+          {Math.round(porcentaje)}%
+        </div>
       </div>
+    </div>
+    <div className="mt-6">
+      <h2 className="text-xl font-bold">Comidas del día {selectedDay}</h2>
+      {(comidasDelDia[selectedDay] || []).map((c, i) => (
+        <div key={i} className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 px-2 py-6 my-2 rounded-md">
+          <span className="font-semibold">{c.horario}:</span> {c.nombre}
+        </div>
+      ))}
+    </div>
 
       {/* <button
         onClick={() => setShowModal(true)}
