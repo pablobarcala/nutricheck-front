@@ -108,20 +108,22 @@ export default function ComidasNutricionistaPage() {
 
   return (
     <div className="w-full min-h-screen py-10">
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex md:flex-row flex-col md:items-center items-start gap-4 md:gap-0 justify-between mb-6">
         <h1 className="text-3xl font-bold">Comidas</h1>
-        <button
-          className="cursor-pointer bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded transition"
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
-        >
-          {mostrarFormulario ? "Cancelar" : "Cargar comida"}
-        </button>
-         <button
-    className="cursor-pointer bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded transition"
-    onClick={() => setMostrarModalImportar(true)}
-  >
-    Cargar desde Excel
-  </button>
+        <div className="flex items-center gap-4">
+          <button
+            className="cursor-pointer bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded transition"
+            onClick={() => setMostrarFormulario(!mostrarFormulario)}
+          >
+            {mostrarFormulario ? "Cancelar" : "Cargar comida"}
+          </button>
+          <button
+            className="cursor-pointer bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded transition"
+            onClick={() => setMostrarModalImportar(true)}
+          >
+            Cargar desde Excel
+          </button>
+        </div>
       </div>
 
       {/*  Cuadro de búsqueda */}
@@ -197,12 +199,11 @@ export default function ComidasNutricionistaPage() {
         />
       )}
       {mostrarModalImportar && (
-  <ModalImportarComidas
-    onClose={() => setMostrarModalImportar(false)}
-    onImportSuccess={fetchComidas}
-  />
-)}
-
+        <ModalImportarComidas
+          onClose={() => setMostrarModalImportar(false)}
+          onImportSuccess={fetchComidas}
+        />
+      )}
     </div>
   );
 }

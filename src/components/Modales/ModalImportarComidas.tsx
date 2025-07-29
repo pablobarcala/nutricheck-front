@@ -3,6 +3,7 @@
 import { useState } from "react";
 import * as XLSX from "xlsx";
 import { environment } from "@/environment/environment";
+import { Upload } from "lucide-react";
 
 interface Props {
   onClose: () => void;
@@ -83,11 +84,22 @@ export default function ModalImportarComidas({ onClose, onImportSuccess }: Props
         <h2 className="text-neutral-900 text-xl font-bold mb-4">📥 Importar comidas desde Excel</h2>
 
         <input
+          id="fileInput"
           type="file"
           accept=".xlsx,.xls,.csv"
           onChange={handleArchivo}
-          className="mb-4 text-neutral-900"
+          className="hidden"
         />
+        <label
+          htmlFor="fileInput"
+          className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded inline-flex items-center gap-2"
+        >
+          <Upload className="w-5 h-5" />
+          Subir archivo
+        </label>
+        {archivo && (
+          <p className="text-sm text-neutral-700">Archivo: {archivo.name}</p>
+        )}
 
         {preview.length > 0 && (
           <div className="overflow-auto max-h-64 border border-gray-300 rounded shadow">
