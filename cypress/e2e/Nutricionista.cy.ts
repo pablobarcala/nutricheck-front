@@ -17,7 +17,10 @@ describe('template spec', () => {
     cy.get('#password').type("12345678");
     cy.get('.from-\\[\\#4AFF50\\]').click();
     cy.get('a[href="/nutricionista/comidas"]').click();
-    cy.get('.min-h-screen > .flex > :nth-child(2)').click();
+    cy.contains('button', 'Cargar comida')
+    .should('be.visible')
+    .click();
+    
     cy.get(':nth-child(1) > .bg-neutral-200').type("Pollo al horno con arroz");
     cy.get(':nth-child(2) > .bg-neutral-200').type("35");
     cy.get(':nth-child(3) > .bg-neutral-200').type("25");
@@ -34,6 +37,7 @@ describe('template spec', () => {
     cy.get('.space-y-2 > .text-white').click();
     cy.get('.flex > .bg-green-500').click();
     cy.get('a[href="/nutricionista/panel-control"]').click();
+    cy.wait(5000);
     cy.get('.space-x-4 > .cursor-pointer').click();
   })
 })
