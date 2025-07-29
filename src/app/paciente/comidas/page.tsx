@@ -112,7 +112,7 @@ if (isNaN(calorias) || calorias <= 0) {
         <button
           key={comida.id}
           onClick={() => setComidaSeleccionada(comida)}
-          className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 p-4 rounded shadow cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-100/5 transition w-full mb-2 text-green-700"
+          className="bg-neutral-100 dark:bg-neutral-100/10 border border-neutral-200 dark:border-neutral-200/10 p-4 rounded shadow cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-100/5 transition w-full mb-2 text-green-800 dark:text-green-600"
         >
           {comida.nombre} - {comida.kcal} kcal
         </button>

@@ -421,7 +421,10 @@ const [diaSeleccionado, setDiaSeleccionado] = useState<string>("");
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="nombre" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip
+                  formatter={(value) => [`${value}`, "Cantidad"]}
+                  labelStyle={{ color: "#374151" }}
+                />
                 <Legend />
                 <Bar dataKey="cantidad" fill="#22c55e" name="Cantidad" />
               </BarChart>

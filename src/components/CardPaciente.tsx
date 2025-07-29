@@ -93,12 +93,12 @@ export default function CardPaciente({ paciente }: any) {
     ];
 
     return(
-        <div className="bg-neutral-100 dark:bg-neutral-100/10 px-4 py-2 rounded-lg flex flex-col gap-4 items-start">
-            <p className="font-bold">{paciente.nombre || "Paciente sin nombre"}</p>
-            <div className="w-full flex gap-2 items-start">
+        <div className="bg-neutral-200/50 dark:bg-neutral-100/10 px-4 py-2 rounded-lg flex flex-col gap-4 items-start">
+            <p className="font-bold text-xl">{paciente.nombre || "Paciente sin nombre"}</p>
+            <div className="w-full flex flex-col md:flex-row md:gap-2 gap-6 items-start">
                 {tiposComida.map(({ key, label }) => (
-                    <div key={key} className="flex flex-col items-center gap-2 w-[25%]">
-                        <p className="font-bold">{label}</p>
+                    <div key={key} className="flex flex-col md:items-center items-start gap-2 w-full md:w-[25%]">
+                        <p className="font-semibold">{label}</p>
                         <div className="flex flex-col w-full gap-2">
                             {comidas[key].length > 0 ? (
                                 comidas[key].map((comida: any, i: number) => (

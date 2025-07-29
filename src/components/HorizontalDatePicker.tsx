@@ -13,6 +13,7 @@ import {
 } from "date-fns";
 import { es } from 'date-fns/locale'
 import clsx from "clsx";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const DAYS_VISIBLE = 5;
 
@@ -72,12 +73,12 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
   }, [currentMonth]);
 
   return (
-    <div className="flex flex-col gap-2 px-4 py-2 w-full mx-auto">
+    <div className="flex flex-col gap-2 w-full">
       {/* Header con mes actual y navegación */}
       <div className="flex justify-between items-center mb-2 w-full">
-        <button onClick={goToPrevMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5">←</button>
+        <button onClick={goToPrevMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"><ChevronLeft className="w-5 h-5" /></button>
         <span className="font-semibold">{format(currentMonth, "MMMM yyyy", { locale: es })}</span>
-        <button onClick={goToNextMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5">→</button>
+        <button onClick={goToNextMonth} className="cursor-pointer p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5"><ChevronRight className="w-5 h-5" /></button>
       </div>
 
       {/* Carrusel con navegación */}
@@ -87,7 +88,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
           disabled={startIndex === 0}
           className="p-2 rounded-full cursor-pointer disabled:opacity-30 hover:bg-black/5 dark:hover:bg-white/5"
         >
-          ←
+          <ChevronLeft className="w-5 h-5" />
         </button>
 
         <div className="flex gap-4 justify-center items-center overflow-hidden flex-1">
@@ -126,7 +127,7 @@ export default function HorizontalDatePicker({ onDateChange }: { onDateChange?: 
           disabled={startIndex + DAYS_VISIBLE >= dates.length}
           className="p-2 rounded-full cursor-pointer disabled:opacity-30 hover:bg-black/5 dark:hover:bg-white/5"
         >
-          →
+          <ChevronRight className="w-5 h-5" />
         </button>
       </div>
     </div>
