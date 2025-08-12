@@ -148,7 +148,7 @@ export default function Inicio() {
         comidaSeleccionada
       }, localStorage.getItem("token"), environment.API);
 
-      alert("Comida registrada con éxito");
+      // alert("Comida registrada con éxito");
 
       setComidasDelDia((prev) => {
         const nuevasComidas = [...(prev[selectedDay] || []), result.data];
